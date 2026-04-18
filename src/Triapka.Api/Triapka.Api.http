@@ -1,6 +1,3 @@
 @Triapka.Api_HostAddress = http://localhost:5100
 
-GET {{Triapka.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
+# Add requests for real API endpoints here when controllers/routes are available.
