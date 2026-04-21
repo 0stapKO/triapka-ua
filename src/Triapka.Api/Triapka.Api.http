@@ -1,0 +1,3 @@
+@Triapka.Api_HostAddress = http://localhost:5100
+
+# Add requests for real API endpoints here when controllers/routes are available.
