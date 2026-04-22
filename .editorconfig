@@ -185,6 +185,11 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
 csharp_prefer_system_threading_lock = true:suggestion
+dotnet_diagnostic.RCS1044.severity = suggestion
+dotnet_diagnostic.RCS1058.severity = none
+dotnet_diagnostic.RCS1075.severity = suggestion
+dotnet_diagnostic.RCS1101.severity = none
+dotnet_diagnostic.RCS1097.severity = none
 
 #### Naming styles ####
 [*.{cs,vb}]
