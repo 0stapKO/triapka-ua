@@ -13,13 +13,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Triapka.Infrastructure", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Triapka.Api", "src\Triapka.Api\Triapka.Api.csproj", "{1454C0C1-BA43-4703-BAE8-F077AFD51E7F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B5A0E72B-B3E0-404D-BFD7-8DBFEFE20333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -39,10 +41,16 @@ Global
 		{1454C0C1-BA43-4703-BAE8-F077AFD51E7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1454C0C1-BA43-4703-BAE8-F077AFD51E7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B5A0E72B-B3E0-404D-BFD7-8DBFEFE20333} = {AFEE7925-FC25-46BE-8059-2700468F74F8}
 		{60D35695-D316-4D2A-910E-BDFE49541D29} = {AFEE7925-FC25-46BE-8059-2700468F74F8}
 		{7F5A8578-15CA-48CB-98BA-B1538FCA7C8F} = {AFEE7925-FC25-46BE-8059-2700468F74F8}
 		{1454C0C1-BA43-4703-BAE8-F077AFD51E7F} = {AFEE7925-FC25-46BE-8059-2700468F74F8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F825223A-6D29-435F-80C1-CC2B8CD4B14B}
 	EndGlobalSection
 EndGlobal
