@@ -115,7 +115,7 @@ csharp_style_prefer_readonly_struct_member = true:suggestion
 # Code-block preferences
 csharp_prefer_braces = true:silent
 csharp_prefer_simple_using_statement = true:suggestion
-csharp_style_namespace_declarations = file_scoped:suggestion
+csharp_style_namespace_declarations = block_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_primary_constructors = true:suggestion
 csharp_style_prefer_top_level_statements = true:silent
@@ -190,6 +190,12 @@ dotnet_diagnostic.RCS1058.severity = none
 dotnet_diagnostic.RCS1075.severity = suggestion
 dotnet_diagnostic.RCS1101.severity = none
 dotnet_diagnostic.RCS1097.severity = none
+dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1200.severity = none
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1009.severity = none
+dotnet_diagnostic.SA0001.severity = none
 
 #### Naming styles ####
 [*.{cs,vb}]
@@ -385,3 +391,13 @@ tab_width = 4
 indent_size = 4
 end_of_line = crlf
 
+# Ігноруємо автозгенеровані файли (щоб зникли помилки від CSC)
+[*.g.cs]
+generated_code = true
+
+[**/obj/**.cs]
+generated_code = true
+
+# Вимикаємо це конкретне правило для Program.cs, бо StyleCop не розуміє Top-level statements
+[Program.cs]
+dotnet_diagnostic.SA1516.severity = none

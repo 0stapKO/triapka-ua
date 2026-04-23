@@ -2,21 +2,18 @@
 
 #nullable disable
 
-namespace Triapka.Infrastructure.Migrations
+namespace Triapka.Infrastructure.Migrations;
+
+/// <inheritdoc />
+public partial class InitialCreate : Migration
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+    }
 
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
     }
 }
