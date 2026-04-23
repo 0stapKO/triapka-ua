@@ -1,7 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Triapka.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -12,6 +18,30 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+Log.Information("Starting Triapka API");
+
+app.Lifetime.ApplicationStarted.Register(() =>
+    Log.Information("API started {@StartupDetails}", new
+    {
+        Environment = app.Environment.EnvironmentName,
+        app.Environment.ApplicationName,
+        app.Environment.ContentRootPath,
+    }));
+
+app.Lifetime.ApplicationStopping.Register(() =>
+    Log.Information("API stopping {@ShutdownDetails}", new
+    {
+        Environment = app.Environment.EnvironmentName,
+        app.Environment.ApplicationName,
+    }));
+
+app.Lifetime.ApplicationStopped.Register(() =>
+    Log.Information("API stopped {@ShutdownDetails}", new
+    {
+        Environment = app.Environment.EnvironmentName,
+        app.Environment.ApplicationName,
+    }));
 
 if (app.Environment.IsDevelopment())
 {
