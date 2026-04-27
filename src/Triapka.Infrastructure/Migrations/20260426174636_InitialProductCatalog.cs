@@ -18,12 +18,9 @@ namespace Triapka.Infrastructure.Migrations
                     CategoryId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: true),
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductCategories", x => x.CategoryId);
-                });
+                constraints: table => table.PrimaryKey("PK_ProductCategories", x => x.CategoryId));
 
             migrationBuilder.CreateTable(
                 name: "Products",
@@ -38,7 +35,7 @@ namespace Triapka.Infrastructure.Migrations
                     StockQuantity = table.Column<int>(type: "integer", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    Rating = table.Column<decimal>(type: "numeric(3,2)", nullable: true)
+                    Rating = table.Column<decimal>(type: "numeric(3,2)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -58,7 +55,7 @@ namespace Triapka.Infrastructure.Migrations
                     ImageId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
-                    ImageUrl = table.Column<string>(type: "text", nullable: false)
+                    ImageUrl = table.Column<string>(type: "text", nullable: false),
                 },
                 constraints: table =>
                 {
