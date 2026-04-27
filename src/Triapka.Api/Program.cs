@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+
+using Triapka.Application.Interfaces;
 using Triapka.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +19,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-var app = builder.Build();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+var app = builder.Build();
 Log.Information("Starting Triapka API");
 
 app.Lifetime.ApplicationStarted.Register(() =>
