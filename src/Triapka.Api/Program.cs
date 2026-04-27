@@ -3,6 +3,7 @@ using Serilog;
 
 using Triapka.Application.Interfaces;
 using Triapka.Infrastructure;
+using Triapka.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

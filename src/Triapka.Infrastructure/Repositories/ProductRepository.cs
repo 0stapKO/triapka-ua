@@ -4,7 +4,7 @@ using Triapka.Domain.Entities;
 
 namespace Triapka.Infrastructure.Repositories
 {
-    internal class ProductRepository(ApplicationDbContext context) : IProductRepository
+    public class ProductRepository(ApplicationDbContext context) : IProductRepository
     {
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
