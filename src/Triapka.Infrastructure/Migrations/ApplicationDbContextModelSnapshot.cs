@@ -34,6 +34,9 @@ namespace Triapka.Infrastructure.Migrations
 
                     b.HasKey("CartId");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Carts");
                 });
 
@@ -162,6 +165,9 @@ namespace Triapka.Infrastructure.Migrations
                     b.HasKey("WishlistItemId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId", "ProductId")
+                        .IsUnique();
 
                     b.ToTable("WishlistItems");
                 });

@@ -49,6 +49,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithMany()
             .HasForeignKey(wi => wi.ProductId);
 
+        modelBuilder.Entity<Cart>()
+            .HasIndex(c => c.UserId)
+            .IsUnique();
+
+        modelBuilder.Entity<WishlistItem>()
+            .HasIndex(w => new { w.UserId, w.ProductId })
+            .IsUnique();
+
         modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(10,2)");
         modelBuilder.Entity<Product>().Property(p => p.Rating).HasColumnType("decimal(3,2)");
     }

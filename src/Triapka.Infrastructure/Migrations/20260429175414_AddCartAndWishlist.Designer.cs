@@ -11,7 +11,7 @@ using Triapka.Infrastructure;
 namespace Triapka.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260429164325_AddCartAndWishlist")]
+    [Migration("20260429175414_AddCartAndWishlist")]
     partial class AddCartAndWishlist
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace Triapka.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("CartId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Carts");
                 });
@@ -165,6 +168,9 @@ namespace Triapka.Infrastructure.Migrations
                     b.HasKey("WishlistItemId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId", "ProductId")
+                        .IsUnique();
 
                     b.ToTable("WishlistItems");
                 });

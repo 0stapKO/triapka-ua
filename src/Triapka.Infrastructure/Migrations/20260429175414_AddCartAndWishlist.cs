@@ -82,9 +82,21 @@ namespace Triapka.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WishlistItems_ProductId",
                 table: "WishlistItems",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WishlistItems_UserId_ProductId",
+                table: "WishlistItems",
+                columns: new[] { "UserId", "ProductId" },
+                unique: true);
         }
 
         /// <inheritdoc />
