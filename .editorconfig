@@ -190,12 +190,16 @@ dotnet_diagnostic.RCS1058.severity = none
 dotnet_diagnostic.RCS1075.severity = suggestion
 dotnet_diagnostic.RCS1101.severity = none
 dotnet_diagnostic.RCS1097.severity = none
+dotnet_diagnostic.RCS1021.severity = none
 dotnet_diagnostic.SA1633.severity = none
 dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1200.severity = none
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1009.severity = none
 dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1010.severity = none
+dotnet_diagnostic.SA1413.severity = none
+dotnet_diagnostic.IDE0053.severity = none
 
 #### Naming styles ####
 [*.{cs,vb}]
