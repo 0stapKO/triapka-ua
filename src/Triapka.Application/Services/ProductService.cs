@@ -1,5 +1,5 @@
-﻿using Triapka.Application.Interfaces;
-using Triapka.Application.DTOs;
+﻿using Triapka.Application.DTOs;
+using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
 
 namespace Triapka.Application.Services;
