@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Triapka.Application.DTOs;
 
-namespace Triapka.Application.Interfaces
+namespace Triapka.Application.Interfaces;
+public interface IProductService
 {
-    internal class IProductService
-    {
-    }
+    Task<IEnumerable<ProductListDto>> GetAllProductsAsync();
+
+    Task<ProductDetailsDto?> GetProductByIdAsync(int id);
+
+    Task<IEnumerable<ProductListDto>> SearchProductsByNameAsync(string query);
 }
