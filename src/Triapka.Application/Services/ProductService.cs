@@ -1,7 +1,8 @@
-﻿namespace Triapka.Application.Services;
-using Triapka.Application.Interfaces;
+﻿using Triapka.Application.Interfaces;
 using Triapka.Application.DTOs;
 using Triapka.Domain.Entities;
+
+namespace Triapka.Application.Services;
 
 public class ProductService(IProductRepository productRepository) : IProductService
 {
