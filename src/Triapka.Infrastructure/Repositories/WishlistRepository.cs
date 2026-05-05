@@ -25,10 +25,7 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
 
         if (existingItem != null)
         {
-            return await context.WishlistItems
-                .Include(w => w.Product)
-                    .ThenInclude(p => p.Images)
-                .FirstAsync(w => w.WishlistItemId == existingItem.WishlistItemId);
+            return existingItem;
         }
 
         var entry = await context.WishlistItems.AddAsync(new WishlistItem

@@ -1,10 +1,6 @@
-﻿namespace Triapka.Application.Interfaces;
+﻿using Triapka.Application.DTOs;
 
-using Triapka.Domain.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Triapka.Application.DTOs;
-
+namespace Triapka.Application.Interfaces;
 public interface IWishlistService
 {
     Task<IEnumerable<WishlistItemDto>> GetWishlistAsync();

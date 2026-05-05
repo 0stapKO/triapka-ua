@@ -17,8 +17,8 @@ public class CartService(ICartRepository cartRepository, IProductRepository prod
     public async Task<CartDto> AddToCartAsync(int productId)
     {
         const int currentCustomerId = 1;
-        var product = await productRepository.GetByIdAsync(productId)
-                      ?? throw new InvalidOperationException("Product does not exist.");
+        _ = await productRepository.GetByIdAsync(productId)
+                    ?? throw new InvalidOperationException("Product does not exist.");
 
         var cart = await cartRepository.GetCartByUserIdAsync(currentCustomerId)
                    ?? new Cart { UserId = currentCustomerId, CartItems = [] };
