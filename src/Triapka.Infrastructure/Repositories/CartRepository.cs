@@ -49,4 +49,15 @@ public class CartRepository(ApplicationDbContext context) : ICartRepository
             .ThenInclude(p => p.Images)
             .FirstOrDefaultAsync(c => c.CartId == targetCartId);
     }
+
+    public async Task<Cart> UpdateCartAsync(Cart cart)
+    {
+        context.Carts.Update(cart);
+        await context.SaveChangesAsync();
+        return await context.Carts
+            .Include(c => c.CartItems)
+                .ThenInclude(i => i.Product)
+                    .ThenInclude(p => p.Images)
+            .FirstAsync(c => c.CartId == cart.CartId);
+    }
 }
