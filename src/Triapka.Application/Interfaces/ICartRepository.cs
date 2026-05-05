@@ -3,7 +3,7 @@
 namespace Triapka.Application.Interfaces;
 public interface ICartRepository
 {
-    Task<Cart> GetCartByUserIdAsync(int userId);
+    Task<Cart?> GetCartByUserIdAsync(int userId);
 
     Task<Cart> AddItemAsync(CartItem item);
 
