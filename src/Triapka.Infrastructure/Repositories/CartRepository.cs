@@ -54,7 +54,6 @@ public class CartRepository(ApplicationDbContext context) : ICartRepository
     {
         context.Carts.Update(cart);
         await context.SaveChangesAsync();
-        
         return await context.Carts
             .Include(c => c.CartItems)
                 .ThenInclude(i => i.Product)
