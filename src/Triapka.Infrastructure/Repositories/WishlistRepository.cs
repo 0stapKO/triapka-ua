@@ -12,13 +12,15 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
         return await context.WishlistItems
             .Where(w => w.UserId == userId)
             .Include(w => w.Product)
-            .ThenInclude(p => p.Images)
+                .ThenInclude(p => p.Images)
             .ToListAsync();
     }
 
     public async Task<WishlistItem> AddAsync(int userId, int productId)
     {
         var existingItem = await context.WishlistItems
+            .Include(w => w.Product)
+                .ThenInclude(p => p.Images)
             .FirstOrDefaultAsync(w => w.UserId == userId && w.ProductId == productId);
 
         if (existingItem != null)
@@ -32,7 +34,17 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
             ProductId = productId
         });
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return await context.WishlistItems
+                .Include(w => w.Product)
+                    .ThenInclude(p => p.Images)
+                .FirstAsync(w => w.UserId == userId && w.ProductId == productId);
+        }
 
         return await context.WishlistItems
             .Include(w => w.Product)
@@ -42,7 +54,10 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
 
     public async Task<WishlistItem?> RemoveAsync(int wishlistItemId)
     {
-        var entity = await context.WishlistItems.FindAsync(wishlistItemId);
+        var entity = await context.WishlistItems
+            .Include(w => w.Product)
+                .ThenInclude(p => p.Images)
+            .FirstOrDefaultAsync(w => w.WishlistItemId == wishlistItemId);
 
         if (entity == null)
         {

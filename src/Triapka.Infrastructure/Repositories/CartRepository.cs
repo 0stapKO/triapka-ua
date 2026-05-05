@@ -29,9 +29,15 @@ public class CartRepository(ApplicationDbContext context) : ICartRepository
             .FirstAsync(c => c.CartId == item.CartId);
     }
 
-    public async Task<Cart> RemoveItemAsync(int itemId)
+    public async Task<Cart?> RemoveItemAsync(int itemId)
     {
-        var itemToRemove = await context.Set<CartItem>().FindAsync(itemId) ?? throw new KeyNotFoundException($"CartItem with ID {itemId} not found.");
+        var itemToRemove = await context.Set<CartItem>().FindAsync(itemId);
+
+        if (itemToRemove == null)
+        {
+            return null;
+        }
+
         var targetCartId = itemToRemove.CartId;
 
         context.Remove(itemToRemove);
@@ -41,6 +47,6 @@ public class CartRepository(ApplicationDbContext context) : ICartRepository
             .Include(c => c.CartItems)
             .ThenInclude(i => i.Product)
             .ThenInclude(p => p.Images)
-            .FirstAsync(c => c.CartId == targetCartId);
+            .FirstOrDefaultAsync(c => c.CartId == targetCartId);
     }
 }
