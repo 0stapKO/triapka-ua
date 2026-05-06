@@ -45,8 +45,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddOpenApi();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
@@ -73,6 +73,7 @@ using (var scope = app.Services.CreateScope())
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
         }
+
         Log.Information("Roles seeding completed successfully.");
     }
     catch (Exception ex)
@@ -80,7 +81,6 @@ using (var scope = app.Services.CreateScope())
         Log.Error(ex, "An error occurred while seeding roles.");
     }
 }
-
 
 Log.Information("Starting Triapka API");
 

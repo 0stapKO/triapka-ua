@@ -13,9 +13,6 @@ public class CartService(
     IProductRepository productRepository,
     IHttpContextAccessor httpContextAccessor) : ICartService
 {
-    private string? GetCurrentUserId() =>
-        httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-
     public async Task<CartDto> GetCartAsync()
     {
         var userId = GetCurrentUserId();
@@ -80,4 +77,7 @@ public class CartService(
             TotalAmount = cart.CartItems.Sum(i => i.Quantity * (i.Product?.Price ?? 0))
         };
     }
+
+    private string? GetCurrentUserId() =>
+        httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 }
