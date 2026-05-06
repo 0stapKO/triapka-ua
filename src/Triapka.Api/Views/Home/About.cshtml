@@ -1,0 +1,258 @@
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TRIAPKA.UA — Про нас</title>
+    <style>
+        :root{
+            --bg: #121212;
+            --panel: #1e1e1e;
+            --panel-2: #242424;
+            --stroke: rgba(255,255,255,.08);
+            --text: rgba(255,255,255,.92);
+            --muted: rgba(255,255,255,.68);
+            --subtle: rgba(255,255,255,.52);
+            --mint: #97e6c2;
+            --mint-2: #6fd7ab;
+            --shadow: 0 18px 60px rgba(0,0,0,.45);
+            --r-xl: 32px;
+            --r-lg: 26px;
+            --r-md: 20px;
+            --r-sm: 16px;
+        }
+
+        *{ box-sizing:border-box; }
+        html, body{ height:100%; }
+        body{
+            margin:0;
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+            font-size: 18px;
+            background:
+                radial-gradient(1100px 700px at 20% -10%, rgba(151,230,194,.10), transparent 60%),
+                radial-gradient(900px 600px at 85% 0%, rgba(151,230,194,.06), transparent 55%),
+                var(--bg);
+            color: var(--text);
+            overflow-x:hidden;
+        }
+
+        body::-webkit-scrollbar{ width:12px; height:12px; }
+        body::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.10); border-radius: 999px; }
+        body::-webkit-scrollbar-track{ background: transparent; }
+        *{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.14) transparent; }
+
+        a{ color: inherit; }
+
+        .shell{
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 20px 20px 60px;
+        }
+
+        .header{
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            margin: 10px 0 20px;
+            border-radius: var(--r-xl);
+            background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-inner{
+            display:flex;
+            justify-content: space-between;
+            align-items:center;
+            padding: 16px 28px;
+            gap: 24px;
+        }
+
+        .brand{
+            display:flex;
+            align-items:center;
+            gap: 16px;
+        }
+        .brand a{
+            display:flex;
+            align-items:center;
+            gap: 12px;
+            font-weight: 850;
+            letter-spacing: .6px;
+            text-decoration:none;
+            white-space:nowrap;
+        }
+        .brand-badge{
+            width: 52px;
+            height: 52px;
+            background:
+                radial-gradient(28px 28px at 34% 28%, rgba(255,255,255,.22), rgba(255,255,255,0) 62%),
+                radial-gradient(30px 30px at 66% 64%, rgba(0,0,0,.20), rgba(0,0,0,0) 66%),
+                linear-gradient(180deg, rgba(151,230,194,1), rgba(111,215,171,1));
+            box-shadow:
+                0 18px 44px rgba(151,230,194,.22),
+                0 26px 70px rgba(0,0,0,.45);
+            position: relative;
+            --splat-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23000' d='M52 7c6 2 7 10 3 14-3 3-2 7 2 9 5 3 10-2 14-7 3-3 8-2 9 2 1 4-3 9-8 12-4 2-5 6-1 9 5 4 12 2 19-2 3-2 7 1 7 5 0 5-6 9-14 10-5 1-7 5-4 9 4 6 12 7 18 8 4 1 5 6 2 9-3 3-10 1-15-2-5-2-8 1-7 6 1 7 7 12 12 16 3 2 2 7-2 9-4 2-10-2-14-7-3-4-8-3-10 1-2 6 1 12 4 18 2 4-2 8-6 7-5-1-7-8-8-14-1-5-6-7-10-4-5 4-5 12-5 18 0 4-5 7-8 4-4-3-3-10-2-15 1-5-3-8-8-6-6 2-9 9-12 15-2 4-7 4-9 1-2-4 1-10 6-14 4-3 3-8-2-10-6-2-12 1-18 4-4 2-8-2-7-6 2-5 9-6 15-7 5-1 7-6 4-10-4-5-12-5-18-5-4 0-7-5-4-8 3-4 10-3 15-2 5 1 8-3 6-8-2-6-9-9-15-12-4-2-4-7-1-9 4-2 10 1 14 6 3 4 8 3 10-2 2-6-1-12-4-18-2-4 2-8 6-7 5 1 7 8 8 14 1 5 6 7 10 4 5-4 5-11 5-17 0-4 4-7 7-5 4 2 4 9 3 14-1 5 3 8 8 6 6-2 9-9 12-15 2-4 7-4 9-1 2 4-1 10-6 14-4 3-3 8 2 10 6 2 12-1 18-4 4-2 8 2 7 6-2 5-9 6-15 7-5 1-7 6-4 10 4 5 12 5 18 5 4 0 7 5 4 8-3 4-10 3-15 2-5-1-8 3-6 8 2 6 9 9 15 12 4 2 4 7 1 9-4 2-10-1-14-6-2-3-6-3-8 0-2 3 0 7 3 10 5 6 8 12 8 18 0 14-12 26-26 26S24 64 24 50 36 24 50 24c5 0 10 2 14 5 3 2 7 0 7-4 0-6-7-12-19-14z'/%3E%3C/svg%3E");
+            -webkit-mask-image: var(--splat-mask);
+            mask-image: var(--splat-mask);
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-position: center;
+            mask-position: center;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,.05);
+            border: 1px solid var(--stroke);
+            border-radius: 999px;
+            padding: 8px 20px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+        .search-icon {
+            color: rgba(255,255,255,.5);
+            font-size: 18px;
+        }
+
+        .header-nav{
+            display:flex;
+            gap: 20px;
+            align-items:center;
+            font-weight: 700;
+        }
+        .header-nav a{
+            text-decoration:none;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            transition: .2s;
+            color: var(--text); /* WHITE BY DEFAULT */
+            font-size: 18px;
+        }
+        .header-nav a:hover{
+            background: rgba(151,230,194,.1);
+            border-color: rgba(151,230,194,.3);
+            color: var(--mint); /* MINT ON HOVER */
+        }
+        .header-nav a.is-active{
+            background: rgba(255,255,255,.1); /* grey pill for active state */
+            border-color: var(--stroke);
+        }
+
+        .header-actions{
+            display:flex;
+            gap: 14px;
+            align-items:center;
+        }
+        .icon-btn{
+            width: 52px;
+            height: 52px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            border-radius: 999px;
+            border: 1px solid var(--stroke);
+            background: rgba(255,255,255,.03);
+            text-decoration:none;
+            font-size: 22px;
+            transition: .2s;
+        }
+        .icon-btn:hover{
+            background: rgba(255,255,255,.05);
+            border-color: rgba(151,230,194,.28);
+        }
+
+        /* About Page Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .main-content h1 {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            margin: 0 0 40px 0;
+            color: var(--text);
+        }
+
+        .main-content p {
+            font-size: 24px;
+            line-height: 1.6;
+            color: var(--muted);
+            margin: 0;
+            font-weight: 400;
+        }
+
+        @@media (max-width: 900px){
+            .header-inner{ flex-wrap: wrap; }
+            .header-nav{ display:none; }
+            .search-bar { order: 3; max-width: 100%; }
+            .main-content h1 { font-size: 48px; }
+            .main-content p { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header class="header" role="banner">
+            <div class="header-inner">
+                <div class="brand">
+                    <a asp-controller="Products" asp-action="Index">
+                        <span class="brand-badge" aria-hidden="true"></span>
+                        <span style="font-size: 22px;">Triapka.ua</span>
+                    </a>
+                </div>
+
+                <form asp-controller="Products" asp-action="Index" method="get" class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" name="search" placeholder="Пошук..." />
+                </form>
+
+                <nav class="header-nav" aria-label="Main">
+                    <a asp-controller="Products" asp-action="Index">Головна</a>
+                    <a asp-controller="Home" asp-action="About" class="is-active">Про нас</a>
+                </nav>
+
+                <div class="header-actions" aria-label="Actions">
+                    <a class="icon-btn" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">🛒</a>
+                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">♡</a>
+                    <a class="icon-btn" href="#" title="Профіль" aria-label="Профіль">👤</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <h1>TRIAPKA.UA</h1>
+            <p>
+                Якість, що перевірена дорогою. Ми зібрали кращі автотовари, щоб кожна ваша поїздка була безпечною та комфортною. Від базових розхідників до спеціалізованих інструментів — Triapka.ua гарантує надійність у кожній деталі. Обирайте професійний рівень обслуговування вашого авто.
+            </p>
+        </main>
+    </div>
+</body>
+</html>
