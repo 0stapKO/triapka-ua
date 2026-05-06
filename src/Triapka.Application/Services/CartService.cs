@@ -1,27 +1,43 @@
-﻿using Triapka.Application.DTOs;
+﻿using System.Security.Claims;
+
+using Microsoft.AspNetCore.Http;
+
+using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
 
 namespace Triapka.Application.Services;
 
-public class CartService(ICartRepository cartRepository, IProductRepository productRepository) : ICartService
+public class CartService(
+    ICartRepository cartRepository,
+    IProductRepository productRepository,
+    IHttpContextAccessor httpContextAccessor) : ICartService
 {
+    private string? GetCurrentUserId() =>
+        httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
     public async Task<CartDto> GetCartAsync()
     {
-        const int currentCustomerId = 1; // TODO: Замінити на реального юзера після Identity
-        var cart = await cartRepository.GetCartByUserIdAsync(currentCustomerId);
+        var userId = GetCurrentUserId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return new CartDto { CartItems = [], TotalAmount = 0 };
+        }
 
+        var cart = await cartRepository.GetCartByUserIdAsync(userId);
         return cart == null ? new CartDto { CartItems = [], TotalAmount = 0 } : MapToCartDto(cart);
     }
 
     public async Task<CartDto> AddToCartAsync(int productId)
     {
-        const int currentCustomerId = 1;
-        _ = await productRepository.GetByIdAsync(productId)
-                    ?? throw new InvalidOperationException("Product does not exist.");
+        var userId = GetCurrentUserId()
+            ?? throw new UnauthorizedAccessException("Користувач не авторизований.");
 
-        var cart = await cartRepository.GetCartByUserIdAsync(currentCustomerId)
-                   ?? new Cart { UserId = currentCustomerId, CartItems = [] };
+        _ = await productRepository.GetByIdAsync(productId)
+                    ?? throw new InvalidOperationException("Товар не існує.");
+
+        var cart = await cartRepository.GetCartByUserIdAsync(userId)
+                   ?? new Cart { UserId = userId, CartItems = [] };
 
         var existingItem = cart.CartItems.FirstOrDefault(i => i.ProductId == productId);
         if (existingItem != null)
@@ -56,12 +72,12 @@ public class CartService(ICartRepository cartRepository, IProductRepository prod
             {
                 ItemId = i.CartItemId,
                 ProductId = i.ProductId,
-                ProductName = i.Product.Name,
-                Price = i.Product.Price,
+                ProductName = i.Product?.Name ?? "Unknown",
+                Price = i.Product?.Price ?? 0,
                 Quantity = i.Quantity,
-                ImageUrl = i.Product.Images.FirstOrDefault()?.ImageUrl ?? string.Empty
+                ImageUrl = i.Product?.Images?.FirstOrDefault()?.ImageUrl ?? string.Empty
             }).ToList(),
-            TotalAmount = cart.CartItems.Sum(i => i.Quantity * i.Product.Price)
+            TotalAmount = cart.CartItems.Sum(i => i.Quantity * (i.Product?.Price ?? 0))
         };
     }
 }
