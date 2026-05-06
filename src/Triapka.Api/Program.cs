@@ -8,6 +8,7 @@ using Triapka.Application.Services;
 using Triapka.Domain.Entities;
 using Triapka.Infrastructure;
 using Triapka.Infrastructure.Repositories;
+using Triapka.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,9 @@ builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmailService, ConsoleEmailService>();
 
 var app = builder.Build();
 
