@@ -10,12 +10,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@(Model?.Name ?? "Details")</title>
+    <title>TRIAPKA.UA — @m.Name</title>
     <style>
         :root{
             --bg: #121212;
             --panel: #1e1e1e;
-            --panel-2: #252525;
+            --panel-2: #242424;
             --stroke: rgba(255,255,255,.08);
             --text: rgba(255,255,255,.92);
             --muted: rgba(255,255,255,.68);
@@ -23,6 +23,7 @@
             --mint: #97e6c2;
             --mint-2: #6fd7ab;
             --shadow: 0 18px 60px rgba(0,0,0,.45);
+            --r-xl: 28px;
             --r-lg: 24px;
             --r-md: 16px;
         }
@@ -32,6 +33,7 @@
         body{
             margin:0;
             font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+            font-size: 16px;
             background:
                 radial-gradient(900px 500px at 20% -10%, rgba(151,230,194,.10), transparent 60%),
                 radial-gradient(700px 450px at 85% 0%, rgba(151,230,194,.06), transparent 55%),
@@ -40,56 +42,238 @@
             overflow-x:hidden;
         }
 
-        /* clean scrollbars */
         body::-webkit-scrollbar{ width:10px; height:10px; }
         body::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.10); border-radius: 999px; }
         body::-webkit-scrollbar-track{ background: transparent; }
         *{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.14) transparent; }
 
-        .wrap{
-            max-width: 1160px;
+        a{ color: inherit; }
+
+        .shell{
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 28px 18px 54px;
+            padding: 14px 14px 40px;
         }
 
-        .nav{
+        .header{
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            margin: 10px 0 14px;
+            border-radius: var(--r-xl);
+            background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-inner{
+            display:grid;
+            grid-template-columns: 240px 1fr 240px;
+            gap: 12px;
+            align-items:center;
+            padding: 14px 16px;
+        }
+
+        .brand{
+            display:flex;
+            align-items:center;
+            gap: 10px;
+            font-weight: 850;
+            letter-spacing: .8px;
+            text-decoration:none;
+        }
+        .brand-badge{
+            width: 54px;
+            height: 54px;
+            background:
+                radial-gradient(24px 24px at 34% 28%, rgba(255,255,255,.22), rgba(255,255,255,0) 62%),
+                radial-gradient(26px 26px at 66% 64%, rgba(0,0,0,.20), rgba(0,0,0,0) 66%),
+                linear-gradient(180deg, rgba(151,230,194,1), rgba(111,215,171,1));
+            box-shadow:
+                0 18px 44px rgba(151,230,194,.22),
+                0 26px 70px rgba(0,0,0,.45);
+            position: relative;
+
+            /* splatter mask (approx. like your reference image) */
+            --splat-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23000' d='M52 7c6 2 7 10 3 14-3 3-2 7 2 9 5 3 10-2 14-7 3-3 8-2 9 2 1 4-3 9-8 12-4 2-5 6-1 9 5 4 12 2 19-2 3-2 7 1 7 5 0 5-6 9-14 10-5 1-7 5-4 9 4 6 12 7 18 8 4 1 5 6 2 9-3 3-10 1-15-2-5-2-8 1-7 6 1 7 7 12 12 16 3 2 2 7-2 9-4 2-10-2-14-7-3-4-8-3-10 1-2 6 1 12 4 18 2 4-2 8-6 7-5-1-7-8-8-14-1-5-6-7-10-4-5 4-5 12-5 18 0 4-5 7-8 4-4-3-3-10-2-15 1-5-3-8-8-6-6 2-9 9-12 15-2 4-7 4-9 1-2-4 1-10 6-14 4-3 3-8-2-10-6-2-12 1-18 4-4 2-8-2-7-6 2-5 9-6 15-7 5-1 7-6 4-10-4-5-12-5-18-5-4 0-7-5-4-8 3-4 10-3 15-2 5 1 8-3 6-8-2-6-9-9-15-12-4-2-4-7-1-9 4-2 10 1 14 6 3 4 8 3 10-2 2-6-1-12-4-18-2-4 2-8 6-7 5 1 7 8 8 14 1 5 6 7 10 4 5-4 5-11 5-17 0-4 4-7 7-5 4 2 4 9 3 14-1 5 3 8 8 6 6-2 9-9 12-15 2-4 7-4 9-1 2 4-1 10-6 14-4 3-3 8 2 10 6 2 12-1 18-4 4-2 8 2 7 6-2 5-9 6-15 7-5 1-7 6-4 10 4 5 12 5 18 5 4 0 7 5 4 8-3 4-10 3-15 2-5-1-8 3-6 8 2 6 9 9 15 12 4 2 4 7 1 9-4 2-10-1-14-6-2-3-6-3-8 0-2 3 0 7 3 10 5 6 8 12 8 18 0 14-12 26-26 26S24 64 24 50 36 24 50 24c5 0 10 2 14 5 3 2 7 0 7-4 0-6-7-12-19-14z'/%3E%3C/svg%3E");
+            -webkit-mask-image: var(--splat-mask);
+            mask-image: var(--splat-mask);
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-position: center;
+            mask-position: center;
+        }
+        .brand-badge::after{
+            content:"";
+            position:absolute;
+            inset:-10px;
+            border-radius: 28px 36px 30px 42px;
+            background: radial-gradient(closest-side, rgba(151,230,194,.16), rgba(151,230,194,0));
+            filter: blur(2px);
+            pointer-events:none;
+        }
+
+        .header-nav{
+            justify-self:center;
+            display:flex;
+            gap: 10px;
+            align-items:center;
+            color: rgba(255,255,255,.80);
+            font-weight: 650;
+        }
+        .header-nav a{
+            text-decoration:none;
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+        }
+        .header-nav a:hover{
+            background: rgba(255,255,255,.04);
+            border-color: rgba(151,230,194,.20);
+        }
+
+        .header-actions{
+            justify-self:end;
+            display:flex;
+            gap: 8px;
+            align-items:center;
+        }
+        .icon-btn{
+            width: 44px;
+            height: 44px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            border-radius: 999px;
+            border: 1px solid var(--stroke);
+            background: rgba(255,255,255,.03);
+            text-decoration:none;
+            font-size: 18px;
+        }
+        .icon-btn:hover{
+            background: rgba(255,255,255,.05);
+            border-color: rgba(151,230,194,.28);
+        }
+
+        .layout{
+            display:grid;
+            grid-template-columns: 240px 1fr;
+            gap: 14px;
+        }
+
+        .side{
+            border-radius: var(--r-xl);
+            background: rgba(255,255,255,.03);
+            border: 1px solid var(--stroke);
+            box-shadow: 0 16px 45px rgba(0,0,0,.35);
+            overflow:hidden;
+            height: fit-content;
+        }
+        .side-h{
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--stroke);
+        }
+        .side-h strong{
+            font-size: 12px;
+            letter-spacing: .35px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.78);
+        }
+        .side-list{
+            list-style:none;
+            padding: 10px;
+            margin: 0;
+            display:flex;
+            flex-direction:column;
+            gap: 6px;
+        }
+        .side-list a{
             display:flex;
             align-items:center;
             justify-content:space-between;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            text-decoration:none;
+            border: 1px solid transparent;
+            color: rgba(255,255,255,.78);
+        }
+        .side-list a:hover{
+            background: rgba(255,255,255,.04);
+            border-color: rgba(151,230,194,.22);
+            color: rgba(255,255,255,.90);
         }
 
+        .tabs{
+            border-radius: var(--r-xl);
+            background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+            padding: 12px;
+        }
+        .tabs-top{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .crumb{
+            color: rgba(255,255,255,.72);
+            font-weight: 650;
+            font-size: 13px;
+        }
         .back{
             display:inline-flex;
             align-items:center;
             gap: 10px;
-            color: rgba(255,255,255,.82);
             text-decoration:none;
             border: 1px solid var(--stroke);
             background: rgba(255,255,255,.03);
-            padding: 10px 12px;
+            padding: 12px 14px;
             border-radius: 999px;
-            transition: background .12s ease, border-color .12s ease, transform .12s ease;
-            user-select:none;
         }
         .back:hover{
             background: rgba(255,255,255,.05);
             border-color: rgba(151,230,194,.28);
         }
-        .back:active{ transform: translateY(1px); }
 
+        .tab-row{
+            display:flex;
+            gap: 8px;
+            flex-wrap:wrap;
+        }
+        .tab{
+            padding: 9px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--stroke);
+            background: rgba(255,255,255,.03);
+            color: rgba(255,255,255,.80);
+            font-weight: 700;
+            text-decoration:none;
+            font-size: 14px;
+        }
+        .tab.is-active{
+            background: rgba(151,230,194,.12);
+            border-color: rgba(151,230,194,.42);
+            color: rgba(255,255,255,.92);
+        }
+
+        .product{
+            margin-top: 12px;
+            display:grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 12px;
+        }
         .panel{
-            border-radius: var(--r-lg);
+            border-radius: var(--r-xl);
             background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
             border: 1px solid var(--stroke);
             box-shadow: var(--shadow);
             overflow:hidden;
-        }
-
-        .split{
-            display:grid;
-            grid-template-columns: 1.2fr .8fr;
             min-height: 520px;
         }
 
@@ -99,17 +283,13 @@
                 radial-gradient(520px 320px at 35% 18%, rgba(151,230,194,.18), transparent 60%),
                 linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
         }
-
         .media img{
             position:absolute;
             inset:0;
             width:100%;
             height:100%;
             object-fit: cover;
-            opacity: .95;
-            filter: saturate(.95) contrast(1.02);
         }
-
         .media .ph{
             position:absolute;
             inset:0;
@@ -118,20 +298,21 @@
             justify-content:center;
             color: rgba(255,255,255,.35);
             font-weight: 650;
-            letter-spacing: .35px;
             text-transform: uppercase;
             font-size: 12px;
         }
 
         .info{
-            padding: 20px 20px 18px;
+            border-radius: var(--r-xl);
+            background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+            padding: 18px;
             display:flex;
             flex-direction:column;
             gap: 12px;
-            border-left: 1px solid var(--stroke);
-            background: rgba(0,0,0,.08);
+            min-height: 520px;
         }
-
         .kicker{
             display:flex;
             align-items:center;
@@ -139,28 +320,22 @@
             gap: 12px;
             color: var(--muted);
             font-size: 12px;
-            letter-spacing: .2px;
         }
-
         .name{
             margin: 0;
-            font-size: 26px;
+            font-size: 28px;
             line-height: 1.15;
-            letter-spacing: .2px;
-            font-weight: 720;
+            font-weight: 740;
         }
-
         .price{
-            font-size: 18px;
-            font-weight: 760;
-            letter-spacing: .2px;
+            font-size: 20px;
+            font-weight: 780;
         }
         .price small{
             color: var(--subtle);
             font-weight: 650;
             margin-left: 6px;
         }
-
         .desc{
             margin: 6px 0 0;
             color: rgba(255,255,255,.76);
@@ -175,43 +350,33 @@
             gap: 10px;
             flex-wrap:wrap;
         }
-
         .btn{
             appearance:none;
             border: 0;
             border-radius: 999px;
-            padding: 12px 14px;
-            font-weight: 700;
+            padding: 14px 16px;
+            font-weight: 800;
             letter-spacing: .2px;
             cursor:pointer;
-            transition: transform .12s ease, filter .12s ease, background .12s ease, color .12s ease, border-color .12s ease;
+            transition: transform .12s ease, filter .12s ease;
             user-select:none;
-            text-decoration:none;
             display:inline-flex;
             align-items:center;
             justify-content:center;
-            gap: 8px;
-            white-space:nowrap;
             flex: 1;
             min-width: 160px;
+            font-size: 15px;
         }
         .btn:active{ transform: translateY(1px); }
-
         .btn-primary{
             background: linear-gradient(180deg, var(--mint), var(--mint-2));
             color: rgba(0,0,0,.82);
             box-shadow: 0 12px 30px rgba(151,230,194,.16);
         }
-        .btn-primary:hover{ filter: brightness(1.03); }
-
         .btn-outline{
             background: rgba(255,255,255,.03);
             color: rgba(255,255,255,.88);
             border: 1px solid rgba(151,230,194,.30);
-        }
-        .btn-outline:hover{
-            background: rgba(151,230,194,.10);
-            border-color: rgba(151,230,194,.45);
         }
 
         .hint{
@@ -221,65 +386,113 @@
         }
 
         @@media (max-width: 980px){
-            .split{ grid-template-columns: 1fr; }
-            .info{ border-left: 0; border-top: 1px solid var(--stroke); }
+            .header-inner{ grid-template-columns: 1fr 1fr; }
+            .header-nav{ display:none; }
+            .layout{ grid-template-columns: 220px 1fr; }
+            .product{ grid-template-columns: 1fr; }
+            .info{ min-height: unset; }
             .btn{ min-width: 0; }
+        }
+        @@media (max-width: 780px){
+            .layout{ grid-template-columns: 1fr; }
+            .side{ order: 2; }
+            .header-inner{ grid-template-columns: 1fr auto; }
         }
     </style>
 </head>
 <body>
-    <main class="wrap">
-        <div class="nav">
-            <a class="back" asp-controller="Products" asp-action="Index">← Назад до каталогу</a>
-        </div>
+    <div class="shell">
+        <header class="header" role="banner">
+            <div class="header-inner">
+                <a class="brand" asp-controller="Products" asp-action="Index">
+                    <span class="brand-badge" aria-hidden="true"></span>
+                    <span>TRIAPKA.UA</span>
+                </a>
 
-        <section class="panel">
-            <div class="split">
-                <div class="media" aria-label="Product image">
-                    @if (!string.IsNullOrWhiteSpace(hero))
-                    {
-                        <img src="@hero" alt="@m.Name" />
-                    }
-                    else
-                    {
-                        <div class="ph">Image</div>
-                    }
-                </div>
+                <nav class="header-nav" aria-label="Main">
+                    <a asp-controller="Products" asp-action="Index">Головна</a>
+                    <a href="#">Про нас</a>
+                </nav>
 
-                <div class="info">
-                    <div class="kicker">
-                        <span>@(string.IsNullOrWhiteSpace(m.CategoryName) ? "Категорія" : m.CategoryName)</span>
-                        <span>@(m.Rating is null ? "—" : $"{m.Rating:0.0} ★")</span>
-                    </div>
-
-                    <h1 class="name">@m.Name</h1>
-
-                    <div class="price">
-                        @m.Price.ToString("0.00") <small>₴</small>
-                    </div>
-
-                    <p class="desc">
-                        @(string.IsNullOrWhiteSpace(m.Description)
-                            ? "Опис буде додано пізніше."
-                            : m.Description)
-                    </p>
-
-                    <div class="actions">
-                        <form asp-controller="Cart" asp-action="Add" method="post" style="flex:1; min-width: 160px;">
-                            <input type="hidden" name="productId" value="@m.ProductId" />
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
-
-                        <form asp-controller="Wishlist" asp-action="Add" method="post" style="flex:1; min-width: 160px;">
-                            <input type="hidden" name="productId" value="@m.ProductId" />
-                            <button type="submit" class="btn btn-outline">Add to Wishlist</button>
-                        </form>
-                    </div>
-
-                    <div class="hint">Після додавання буде редірект у відповідний список.</div>
+                <div class="header-actions" aria-label="Actions">
+                    <a class="icon-btn" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">🛒</a>
+                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">♡</a>
+                    <a class="icon-btn" href="#" title="Профіль" aria-label="Профіль">👤</a>
                 </div>
             </div>
-        </section>
-    </main>
+        </header>
+
+        <div class="layout">
+            <aside class="side" aria-label="Menu">
+                <div class="side-h"><strong>Меню</strong></div>
+                <ul class="side-list">
+                    <li><a asp-controller="Products" asp-action="Index"><span>Товари</span><span style="color:rgba(255,255,255,.45)">›</span></a></li>
+                    <li><a href="#"><span>Користувачі</span><span style="color:rgba(255,255,255,.45)">›</span></a></li>
+                    <li><a href="#"><span>Замовлення</span><span style="color:rgba(255,255,255,.45)">›</span></a></li>
+                    <li><a href="#"><span>Відгуки</span><span style="color:rgba(255,255,255,.45)">›</span></a></li>
+                </ul>
+            </aside>
+
+            <main class="main">
+                <section class="tabs" aria-label="Product navigation">
+                    <div class="tabs-top">
+                        <div class="crumb">Сторінка товару / <span style="color:rgba(255,255,255,.92)">@m.Name</span></div>
+                        <a class="back" asp-controller="Products" asp-action="Index">← Назад</a>
+                    </div>
+                    <div class="tab-row" role="tablist" aria-label="Sections">
+                        <a class="tab is-active" href="#опис" role="tab" aria-selected="true">Опис товару</a>
+                        <a class="tab" href="#характеристики" role="tab" aria-selected="false">Характеристики</a>
+                        <a class="tab" href="#відгуки" role="tab" aria-selected="false">Відгуки</a>
+                    </div>
+                </section>
+
+                <section class="product" aria-label="Product details">
+                    <div class="panel media" aria-label="Product image">
+                        @if (!string.IsNullOrWhiteSpace(hero))
+                        {
+                            <img src="@hero" alt="@m.Name" />
+                        }
+                        else
+                        {
+                            <div class="ph">Image</div>
+                        }
+                    </div>
+
+                    <div class="info">
+                        <div class="kicker">
+                            <span>@(string.IsNullOrWhiteSpace(m.CategoryName) ? "Категорія" : m.CategoryName)</span>
+                            <span>@(m.Rating is null ? "—" : $"{m.Rating:0.0} ★")</span>
+                        </div>
+
+                        <h1 class="name">@m.Name</h1>
+
+                        <div class="price">
+                            @m.Price.ToString("0.00") <small>₴</small>
+                        </div>
+
+                        <div id="опис">
+                            <p class="desc">
+                                @(string.IsNullOrWhiteSpace(m.Description) ? "Опис буде додано пізніше." : m.Description)
+                            </p>
+                        </div>
+
+                        <div class="actions">
+                            <form asp-controller="Cart" asp-action="Add" method="post" style="flex:1; min-width: 160px;">
+                                <input type="hidden" name="productId" value="@m.ProductId" />
+                                <button type="submit" class="btn btn-primary">Додати в кошик</button>
+                            </form>
+
+                            <form asp-controller="Wishlist" asp-action="Add" method="post" style="flex:1; min-width: 160px;">
+                                <input type="hidden" name="productId" value="@m.ProductId" />
+                                <button type="submit" class="btn btn-outline">В обране</button>
+                            </form>
+                        </div>
+
+                        <div class="hint">Зараз вкладки статичні (для верстки), але структура готова під інтерактив.</div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
 </body>
 </html>
