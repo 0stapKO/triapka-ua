@@ -5,6 +5,8 @@ public class ProductDetailsDto
 
     public string Name { get; set; } = null!;
 
+    public string? Description { get; set; }
+
     public decimal Price { get; set; }
 
     public List<string> ImageUrls { get; set; } = [];
