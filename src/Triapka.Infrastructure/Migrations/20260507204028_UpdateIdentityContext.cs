@@ -13,7 +13,7 @@ namespace Triapka.Infrastructure.Migrations
         {
             migrationBuilder.Sql("DELETE FROM \"Carts\";");
             migrationBuilder.Sql("DELETE FROM \"WishlistItems\";");
-            
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Carts_ApplicationUser_UserId",
                 table: "Carts");

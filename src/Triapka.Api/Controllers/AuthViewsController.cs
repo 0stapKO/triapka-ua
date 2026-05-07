@@ -35,9 +35,13 @@ public class AuthViewsController : Controller
             if (result.Succeeded)
             {
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
                     return LocalRedirect(returnUrl);
+                }
+
                 return Redirect("/");
             }
+
             ModelState.AddModelError(string.Empty, "Невірний логін або пароль.");
         }
 
@@ -55,9 +59,9 @@ public class AuthViewsController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = new ApplicationUser 
-            { 
-                UserName = dto.Email, 
+            var user = new ApplicationUser
+            {
+                UserName = dto.Email,
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName
@@ -97,7 +101,9 @@ public class AuthViewsController : Controller
     public async Task<IActionResult> ForgotPassword([FromServices] Triapka.Application.Interfaces.IEmailService emailService, ForgotPasswordDto dto)
     {
         if (!ModelState.IsValid)
+        {
             return View("~/Views/Auth/ForgotPassword.cshtml", dto);
+        }
 
         var user = await _userManager.FindByEmailAsync(dto.Email);
         if (user == null)
@@ -134,7 +140,8 @@ public class AuthViewsController : Controller
         {
             return BadRequest("Для скидання пароля необхідний код.");
         }
-        var model = new ResetPasswordDto { Token = code, Email = email ?? "" };
+
+        ResetPasswordDto model = new ResetPasswordDto { Token = code, Email = email ?? string.Empty };
         return View("~/Views/Auth/ResetPassword.cshtml", model);
     }
 
@@ -142,7 +149,9 @@ public class AuthViewsController : Controller
     public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
     {
         if (!ModelState.IsValid)
+        {
             return View("~/Views/Auth/ResetPassword.cshtml", dto);
+        }
 
         var user = await _userManager.FindByEmailAsync(dto.Email);
         if (user == null)
@@ -161,6 +170,7 @@ public class AuthViewsController : Controller
         {
             ModelState.AddModelError(string.Empty, error.Description);
         }
+
         return View("~/Views/Auth/ResetPassword.cshtml", dto);
     }
 
