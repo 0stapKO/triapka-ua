@@ -72,7 +72,7 @@ public class ProfileController : Controller
             {
                 return RedirectToAction("Index");
             }
-            
+
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
@@ -104,10 +104,15 @@ public class ProfileController : Controller
     public async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
     {
         if (!ModelState.IsValid)
+            {
             return View("~/Views/Profile/ChangePassword.cshtml", dto);
+        }
 
         var user = await _userManager.GetUserAsync(User);
-        if (user == null) return NotFound();
+        if (user == null)
+        {
+            return NotFound();
+        }
 
         var result = await _userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
         if (result.Succeeded)

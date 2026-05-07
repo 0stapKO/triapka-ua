@@ -18,9 +18,16 @@ public class AuthController(
     /// Реєстрація нового користувача.
     /// Після успішної реєстрації надсилається лист з посиланням для підтвердження email.
     /// </summary>
+    /// <param name="dto">The registration data transfer object containing user details.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
+        if (dto is null)
+        {
+            throw new ArgumentNullException(nameof(dto));
+        }
+
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
@@ -65,6 +72,9 @@ public class AuthController(
     /// <summary>
     /// Підтвердження email за токеном із листа.
     /// </summary>
+    /// <param name="userId">The unique identifier of the user whose email is being confirmed.</param>
+    /// <param name="token">The token sent to the user's email for confirmation.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpGet("confirm-email")]
     public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
     {
@@ -86,6 +96,8 @@ public class AuthController(
     /// <summary>
     /// Логін користувача. Встановлює cookie сесії.
     /// </summary>
+    /// <param name="dto">The registration data transfer object containing user details.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
@@ -107,6 +119,8 @@ public class AuthController(
     /// <summary>
     /// Запит на відновлення пароля.
     /// </summary>
+    /// <param name="dto">The registration data transfer object containing user details.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("forgot-password")]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
     {
@@ -145,6 +159,8 @@ public class AuthController(
     /// <summary>
     /// Скидання пароля за токеном.
     /// </summary>
+    /// <param name="dto">The registration data transfer object containing user details.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
     {
