@@ -1,6 +1,8 @@
-﻿namespace Triapka.Application.DTOs;
+namespace Triapka.Application.DTOs;
 public class WishlistItemDto
 {
+    public int WishlistItemId { get; set; }
+
     public int ProductId { get; set; }
 
     public string ProductName { get; set; } = string.Empty;

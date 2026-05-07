@@ -1,4 +1,4 @@
-﻿using Triapka.Application.DTOs;
+using Triapka.Application.DTOs;
 
 namespace Triapka.Application.Interfaces;
 
@@ -9,4 +9,6 @@ public interface ICartService
     Task<CartDto> AddToCartAsync(int productId);
 
     Task<CartDto> RemoveFromCartAsync(int cartItemId);
+
+    Task<CartDto> UpdateQuantityAsync(int cartItemId, int newQuantity);
 }

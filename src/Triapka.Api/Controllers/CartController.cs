@@ -39,4 +39,12 @@ public class CartController : Controller
         _logger.LogInformation("Item {ItemId} was removed from the cart", itemId);
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateQuantity(int itemId, int newQuantity)
+    {
+        await _cartService.UpdateQuantityAsync(itemId, newQuantity);
+        _logger.LogInformation("Item {ItemId} quantity updated to {NewQuantity}", itemId, newQuantity);
+        return RedirectToAction(nameof(Index));
+    }
 }
