@@ -1,4 +1,4 @@
-﻿using Triapka.Application.DTOs;
+using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
 
@@ -45,6 +45,31 @@ public class CartService(ICartRepository cartRepository, IProductRepository prod
     {
         var updatedCart = await cartRepository.RemoveItemAsync(cartItemId);
         return updatedCart != null ? MapToCartDto(updatedCart) : new CartDto();
+    }
+
+    public async Task<CartDto> UpdateQuantityAsync(int cartItemId, int newQuantity)
+    {
+        if (newQuantity <= 0)
+        {
+            return await RemoveFromCartAsync(cartItemId);
+        }
+
+        const int currentCustomerId = 1;
+        var cart = await cartRepository.GetCartByUserIdAsync(currentCustomerId);
+        if (cart == null)
+        {
+            return new CartDto();
+        }
+
+        var item = cart.CartItems.FirstOrDefault(i => i.CartItemId == cartItemId);
+        if (item != null)
+        {
+            item.Quantity = newQuantity;
+            var updatedCart = await cartRepository.UpdateCartAsync(cart);
+            return MapToCartDto(updatedCart);
+        }
+
+        return MapToCartDto(cart);
     }
 
     private static CartDto MapToCartDto(Cart cart)
