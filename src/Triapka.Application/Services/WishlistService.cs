@@ -1,4 +1,4 @@
-﻿using Triapka.Application.DTOs;
+using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Application.Services;
@@ -32,6 +32,7 @@ public class WishlistService(IWishlistRepository wishlistRepository, IProductRep
     {
         return new WishlistItemDto
         {
+            WishlistItemId = item.WishlistItemId,
             ProductId = item.ProductId,
             ProductName = item.Product.Name,
             Price = item.Product.Price,
