@@ -1,21 +1,23 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 using Triapka.Domain.Entities;
 
 namespace Triapka.Infrastructure;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public DbSet<Product> Products { get; set; }
+    public DbSet<Product> Products { get; set; } = null!;
 
-    public DbSet<ProductCategory> ProductCategories { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; } = null!;
 
-    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; } = null!;
 
-    public DbSet<Cart> Carts { get; set; }
+    public DbSet<Cart> Carts { get; set; } = null!;
 
-    public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<CartItem> CartItems { get; set; } = null!;
 
-    public DbSet<WishlistItem> WishlistItems { get; set; }
+    public DbSet<WishlistItem> WishlistItems { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,8 +52,20 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasForeignKey(wi => wi.ProductId);
 
         modelBuilder.Entity<Cart>()
+            .HasOne(c => c.User)
+            .WithOne(u => u.Cart)
+            .HasForeignKey<Cart>(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Cart>()
             .HasIndex(c => c.UserId)
             .IsUnique();
+
+        modelBuilder.Entity<WishlistItem>()
+            .HasOne(w => w.User)
+            .WithMany(u => u.WishlistItems)
+            .HasForeignKey(w => w.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<WishlistItem>()
             .HasIndex(w => new { w.UserId, w.ProductId })
