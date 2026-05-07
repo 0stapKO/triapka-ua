@@ -141,7 +141,7 @@
                                 <div class="item-name">@item.ProductName</div>
                                 <div class="item-price">@item.Price.ToString("0.00") ₴</div>
                                 <form asp-controller="Wishlist" asp-action="Remove" method="post" style="margin:0;">
-                                    <input type="hidden" name="itemId" value="@item.ProductId" />
+                                    <input type="hidden" name="itemId" value="@item.WishlistItemId" />
                                     <button type="submit" class="btn-trash" aria-label="Видалити"><i class="bi bi-trash text-danger" style="color: #dc3545;"></i></button>
                                 </form>
                             </div>
