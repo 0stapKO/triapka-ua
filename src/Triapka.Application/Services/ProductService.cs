@@ -42,6 +42,7 @@ public class ProductService(IProductRepository productRepository) : IProductServ
         {
             ProductId = p.ProductId,
             Name = p.Name,
+            Description = p.Description,
             Price = p.Price,
             ImageUrls = p.Images.Select(static i => i.ImageUrl).ToList(),
             Rating = p.Rating,
