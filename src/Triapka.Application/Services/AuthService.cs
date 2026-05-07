@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
@@ -52,5 +52,34 @@ public class AuthService(
             dto.Email, dto.Password, dto.RememberMe, lockoutOnFailure: false);
 
         return result.Succeeded;
+    }
+
+    public async Task<(bool Success, string? Token)> ForgotPasswordAsync(ForgotPasswordDto dto)
+    {
+        var user = await userManager.FindByEmailAsync(dto.Email);
+        if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
+        {
+            return (false, null);
+        }
+
+        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        return (true, token);
+    }
+
+    public async Task<(bool Success, IEnumerable<string> Errors)> ResetPasswordAsync(ResetPasswordDto dto)
+    {
+        var user = await userManager.FindByEmailAsync(dto.Email);
+        if (user == null)
+        {
+            return (false, ["Користувача не знайдено."]);
+        }
+
+        var result = await userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
+        if (!result.Succeeded)
+        {
+            return (false, result.Errors.Select(e => e.Description));
+        }
+
+        return (true, []);
     }
 }

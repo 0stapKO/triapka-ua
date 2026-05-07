@@ -40,8 +40,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = "Triapka.AuthCookie";
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
-    options.LoginPath = "/api/auth/login";
-    options.AccessDeniedPath = "/api/auth/access-denied";
+    options.LoginPath = "/Auth/Login";
+    options.AccessDeniedPath = "/Auth/AccessDenied";
     options.SlidingExpiration = true;
 });
 
@@ -60,7 +60,7 @@ builder.Services.AddScoped<IWishlistService, WishlistService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IEmailService, ConsoleEmailService>();
+builder.Services.AddScoped<IEmailService, MailKitEmailService>();
 
 var app = builder.Build();
 

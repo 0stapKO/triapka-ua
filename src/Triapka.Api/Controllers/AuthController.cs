@@ -103,4 +103,68 @@ public class AuthController(
 
         return Ok(new { message = "Вхід успішний." });
     }
+
+    /// <summary>
+    /// Запит на відновлення пароля.
+    /// </summary>
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var (success, token) = await authService.ForgotPasswordAsync(dto);
+
+        // Always return 200 OK for security reasons to avoid revealing if the email exists
+        if (!success || string.IsNullOrEmpty(token))
+        {
+            return Ok(new { message = "Якщо вказаний email існує, ми надіслали інструкції з відновлення пароля." });
+        }
+
+        var resetLink = linkGenerator.GetUriByAction(
+            httpContextAccessor.HttpContext!,
+            action: nameof(ResetPassword),
+            controller: "Auth",
+            values: new { email = dto.Email, token = token });
+
+        logger.LogInformation(
+            "Посилання для відновлення пароля для {Email}: {Link}",
+            dto.Email,
+            resetLink);
+
+        await emailService.SendEmailAsync(
+            dto.Email,
+            "Відновлення пароля — Triapka",
+            $"Для відновлення пароля перейдіть за посиланням:\n{resetLink}");
+
+        return Ok(new { message = "Якщо вказаний email існує, ми надіслали інструкції з відновлення пароля." });
+    }
+
+    /// <summary>
+    /// Скидання пароля за токеном.
+    /// </summary>
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var (success, errors) = await authService.ResetPasswordAsync(dto);
+
+        if (!success)
+        {
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(string.Empty, error);
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        return Ok(new { message = "Пароль успішно змінено." });
+    }
 }

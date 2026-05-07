@@ -1,6 +1,6 @@
-﻿namespace Triapka.Application.Interfaces;
+namespace Triapka.Application.Interfaces;
 
 public interface IEmailService
 {
-    Task SendEmailAsync(string toEmail, string subject, string message);
+    Task SendEmailAsync(string to, string subject, string body);
 }

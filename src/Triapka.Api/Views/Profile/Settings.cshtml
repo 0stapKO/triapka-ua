@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TRIAPKA.UA — Про нас</title>
+    <title>TRIAPKA.UA — Налаштування</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root{
@@ -16,7 +16,6 @@
             --stroke: rgba(0,0,0,.08);
             --text: #212529;
             --muted: rgba(0,0,0,.5);
-            --subtle: rgba(0,0,0,.3);
             --accent: #20c997;
             --mint: #20c997;
             --mint-2: #1aa179;
@@ -117,38 +116,6 @@
             mask-position: center;
         }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: var(--panel);
-            border: 1px solid var(--stroke);
-            border-radius: 999px;
-            padding: 8px 20px;
-            flex: 1;
-            min-width: 250px;
-            max-width: 400px;
-        }
-        .search-bar input {
-            background: transparent;
-            border: none;
-            color: var(--text);
-            outline: none;
-            width: 100%;
-            margin-left: 10px;
-            font-size: 16px;
-        }
-        .search-icon {
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-        }
-        .search-icon .icon-style {
-            color: var(--muted);
-            width: 20px;
-            height: 20px;
-            stroke-width: 2px;
-        }
-
         .header-nav{
             display:flex;
             gap: 20px;
@@ -168,10 +135,6 @@
             background: rgba(32,201,151,.1);
             border-color: rgba(32,201,151,.3);
             color: var(--accent);
-        }
-        .header-nav a.is-active{
-            background: rgba(0,0,0,.05);
-            border-color: var(--stroke);
         }
 
         .header-actions{
@@ -199,40 +162,130 @@
             color: var(--accent);
         }
 
-        /* About Page Content */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 20px;
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
+        .layout{
+            display:grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .side{
+            border-radius: var(--r-xl);
+            background: var(--panel);
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+            overflow:hidden;
+            height: fit-content;
         }
         
-        .main-content h1 {
-            font-size: 64px;
-            font-weight: 900;
-            letter-spacing: 2.5px;
-            margin: 0 0 40px 0;
-            color: var(--text);
-        }
-
-        .main-content p {
-            font-size: 24px;
-            line-height: 1.6;
-            color: var(--muted);
+        .side-list{
+            list-style: none;
+            padding: 16px;
             margin: 0;
-            font-weight: 400;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        @@media (max-width: 900px){
-            .header-inner{ flex-wrap: wrap; }
+        .side-list a{
+            text-decoration:none;
+            color: var(--text);
+            font-weight: 600;
+            transition: .2s;
+            font-size: 18px;
+            padding: 12px 18px;
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .side-list a:hover{
+            background: rgba(32,201,151,.1);
+            color: var(--accent);
+        }
+        .side-list a.active {
+            background: var(--accent);
+            color: white;
+        }
+        .side-list a.active .icon-style {
+            color: white;
+            filter: none;
+        }
+
+        .main{
+            min-width: 0;
+            background: var(--panel);
+            border-radius: var(--r-xl);
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+            padding: 40px;
+        }
+
+        .main h2 {
+            margin: 0 0 30px;
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .setting-item {
+            background: var(--bg);
+            border: 1px solid var(--stroke);
+            border-radius: var(--r-lg);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .setting-item .info h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .setting-item .info p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            border-radius: 999px;
+            padding: 8px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+            text-decoration: none;
+        }
+        .btn-outline:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .logout-btn {
+            color: #dc3545 !important;
+        }
+        .logout-btn .icon-style {
+            color: #dc3545 !important;
+        }
+        .logout-btn:hover {
+            background: #f8d7da !important;
+        }
+
+        @@media (max-width: 992px){
+            .layout{ grid-template-columns: 1fr; }
+        }
+        @@media (max-width: 768px){
             .header-nav{ display:none; }
-            .search-bar { order: 3; max-width: 100%; }
-            .main-content h1 { font-size: 48px; }
-            .main-content p { font-size: 20px; }
         }
     </style>
 </head>
@@ -246,38 +299,73 @@
                         <span style="font-size: 22px;">Triapka.ua</span>
                     </a>
                 </div>
-
-                <form asp-controller="Products" asp-action="Index" method="get" class="search-bar">
-                    <span class="search-icon"><i data-lucide="search" class="icon-style"></i></span>
-                    <input type="text" name="search" placeholder="Пошук..." />
-                </form>
-
                 <nav class="header-nav" aria-label="Main">
                     <a asp-controller="Products" asp-action="Index">Головна</a>
-                    <a asp-controller="Home" asp-action="About" class="is-active">Про нас</a>
+                    <a asp-controller="Home" asp-action="About">Про нас</a>
                 </nav>
-
                 <div class="header-actions" aria-label="Actions">
-                    <a class="icon-btn" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">
-                        <i data-lucide="shopping-cart" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
-                    </a>
-                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">
-                        <i data-lucide="heart" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
-                    </a>
-                    <a class="icon-btn" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
-                        <i data-lucide="user" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
-                    </a>
+                    <a class="icon-btn" asp-controller="Cart" asp-action="Index" title="Кошик"><i data-lucide="shopping-cart" class="icon-style" style="width:24px; height:24px;"></i></a>
+                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index" title="Вподобані"><i data-lucide="heart" class="icon-style" style="width:24px; height:24px;"></i></a>
+                    <a class="icon-btn" asp-controller="Profile" asp-action="Index" title="Профіль"><i data-lucide="user" class="icon-style" style="width:24px; height:24px;"></i></a>
                 </div>
             </div>
         </header>
 
-        <main class="main-content">
-            <h1>TRIAPKA.UA</h1>
-            <p>
-                Якість, що перевірена дорогою. Ми зібрали кращі автотовари, щоб кожна ваша поїздка була безпечною та комфортною. Від базових розхідників до спеціалізованих інструментів — Triapka.ua гарантує надійність у кожній деталі. Обирайте професійний рівень обслуговування вашого авто.
-            </p>
-        </main>
+        <div class="layout">
+            <aside class="side" aria-label="Profile Menu">
+                <ul class="side-list">
+                    <li>
+                        <a href="/Profile">
+                            <i data-lucide="user" class="icon-style" style="width:20px; height:20px;"></i>
+                            Мої дані
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Profile/Orders">
+                            <i data-lucide="package" class="icon-style" style="width:20px; height:20px;"></i>
+                            Історія замовлень
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Profile/Settings" class="active">
+                            <i data-lucide="settings" class="icon-style" style="width:20px; height:20px;"></i>
+                            Налаштування
+                        </a>
+                    </li>
+                    <li style="margin-top: 20px; border-top: 1px solid var(--stroke); padding-top: 20px;">
+                        <form id="logoutForm" asp-controller="AuthViews" asp-action="Logout" method="post" style="display:none;"></form>
+                        <a href="#" class="logout-btn" onclick="document.getElementById('logoutForm').submit(); return false;">
+                            <i data-lucide="log-out" class="icon-style" style="width:20px; height:20px;"></i>
+                            Вийти
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="main">
+                <h2>Налаштування</h2>
+                
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="info">
+                            <h3>Пароль</h3>
+                            <p>Змініть свій пароль для безпеки акаунту</p>
+                        </div>
+                        <a href="/Profile/ChangePassword" class="btn-outline">Змінити пароль</a>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="info">
+                            <h3>Сповіщення</h3>
+                            <p>Керуйте розсилкою та сповіщеннями на email</p>
+                        </div>
+                        <a href="#" class="btn-outline">Налаштувати</a>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
+    
     <script>
         lucide.createIcons();
     </script>
