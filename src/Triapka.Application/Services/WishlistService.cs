@@ -1,7 +1,6 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 
 using Microsoft.AspNetCore.Http;
-
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 
@@ -46,6 +45,7 @@ public class WishlistService(
     {
         return new WishlistItemDto
         {
+            WishlistItemId = item.WishlistItemId,
             ProductId = item.ProductId,
             ProductName = item.Product.Name,
             Price = item.Product.Price,
