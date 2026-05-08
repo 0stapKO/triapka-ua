@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Api.Controllers;
 
+[Authorize]
 public class WishlistController : Controller
 {
     private readonly IWishlistService _wishlistService;

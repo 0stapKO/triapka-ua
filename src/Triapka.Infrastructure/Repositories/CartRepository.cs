@@ -7,7 +7,7 @@ namespace Triapka.Infrastructure.Repositories;
 
 public class CartRepository(ApplicationDbContext context) : ICartRepository
 {
-    public async Task<Cart?> GetCartByUserIdAsync(int userId)
+    public async Task<Cart?> GetCartByUserIdAsync(string userId)
     {
         return await context.Carts
             .Include(c => c.CartItems)
@@ -19,7 +19,6 @@ public class CartRepository(ApplicationDbContext context) : ICartRepository
     public async Task<Cart> AddItemAsync(CartItem item)
     {
         await context.AddAsync(item);
-
         await context.SaveChangesAsync();
 
         return await context.Carts
@@ -54,10 +53,11 @@ public class CartRepository(ApplicationDbContext context) : ICartRepository
     {
         context.Carts.Update(cart);
         await context.SaveChangesAsync();
+
         return await context.Carts
             .Include(c => c.CartItems)
-                .ThenInclude(i => i.Product)
-                    .ThenInclude(p => p.Images)
+            .ThenInclude(i => i.Product)
+            .ThenInclude(p => p.Images)
             .FirstAsync(c => c.CartId == cart.CartId);
     }
 }

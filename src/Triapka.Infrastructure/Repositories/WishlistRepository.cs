@@ -7,7 +7,7 @@ namespace Triapka.Infrastructure.Repositories;
 
 public class WishlistRepository(ApplicationDbContext context) : IWishlistRepository
 {
-    public async Task<IEnumerable<WishlistItem>> GetByUserIdAsync(int userId)
+    public async Task<IEnumerable<WishlistItem>> GetByUserIdAsync(string userId)
     {
         return await context.WishlistItems
             .Where(w => w.UserId == userId)
@@ -16,7 +16,7 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
             .ToListAsync();
     }
 
-    public async Task<WishlistItem> AddAsync(int userId, int productId)
+    public async Task<WishlistItem> AddAsync(string userId, int productId)
     {
         var existingItem = await context.WishlistItems
             .Include(w => w.Product)
