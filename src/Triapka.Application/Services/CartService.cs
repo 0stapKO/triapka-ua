@@ -66,8 +66,13 @@ public class CartService(
             return await RemoveFromCartAsync(cartItemId);
         }
 
-        const int currentCustomerId = 1;
-        var cart = await cartRepository.GetCartByUserIdAsync(currentCustomerId);
+        var userId = GetCurrentUserId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return new CartDto();
+        }
+
+        var cart = await cartRepository.GetCartByUserIdAsync(userId);
         if (cart == null)
         {
             return new CartDto();
