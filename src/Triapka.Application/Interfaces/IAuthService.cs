@@ -1,4 +1,4 @@
-﻿using Triapka.Application.DTOs;
+using Triapka.Application.DTOs;
 
 namespace Triapka.Application.Interfaces;
 
@@ -9,4 +9,8 @@ public interface IAuthService
     Task<bool> ConfirmEmailAsync(string userId, string token);
 
     Task<bool> LoginAsync(LoginDto dto);
+
+    Task<(bool Success, string? Token)> ForgotPasswordAsync(ForgotPasswordDto dto);
+
+    Task<(bool Success, IEnumerable<string> Errors)> ResetPasswordAsync(ResetPasswordDto dto);
 }

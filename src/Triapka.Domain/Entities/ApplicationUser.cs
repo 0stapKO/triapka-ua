@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Triapka.Domain.Entities
 {
@@ -7,6 +7,8 @@ namespace Triapka.Domain.Entities
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
+
+        public string? Address { get; set; }
 
         public virtual Cart? Cart { get; set; }
 
