@@ -1,22 +1,19 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+
 using MimeKit;
+
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Infrastructure.Services;
 
-public class MailKitEmailService : IEmailService
+public class MailKitEmailService(IConfiguration config, ILogger<MailKitEmailService> logger) : IEmailService
 {
-    private readonly IConfiguration _config;
-    private readonly ILogger<MailKitEmailService> _logger;
-
-    public MailKitEmailService(IConfiguration config, ILogger<MailKitEmailService> logger)
-    {
-        _config = config;
-        _logger = logger;
-    }
+    private readonly IConfiguration _config = config;
+    private readonly ILogger<MailKitEmailService> _logger = logger;
 
     public async Task SendEmailAsync(string to, string subject, string body)
     {

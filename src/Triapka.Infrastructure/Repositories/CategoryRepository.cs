@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
 

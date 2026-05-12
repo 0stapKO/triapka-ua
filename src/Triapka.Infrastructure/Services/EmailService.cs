@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Infrastructure.Services;

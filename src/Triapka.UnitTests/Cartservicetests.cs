@@ -42,7 +42,7 @@ public class CartServiceTests
     }
 
     private CartService CreateSut() =>
-        new CartService(_cartRepoMock.Object, _productRepoMock.Object, _httpContextMock.Object);
+        new(_cartRepoMock.Object, _productRepoMock.Object, _httpContextMock.Object);
 
     [Fact]
     public async Task GetCartAsync_WhenUserHasNoCart_ShouldReturnEmptyCartDto()

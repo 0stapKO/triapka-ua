@@ -12,6 +12,6 @@ namespace Triapka.Domain.Entities
 
         public virtual Cart? Cart { get; set; }
 
-        public virtual ICollection<WishlistItem> WishlistItems { get; set; } = new List<WishlistItem>();
+        public virtual ICollection<WishlistItem> WishlistItems { get; set; } = [];
     }
 }

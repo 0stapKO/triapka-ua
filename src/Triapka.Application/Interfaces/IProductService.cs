@@ -8,4 +8,6 @@ public interface IProductService
     Task<ProductDetailsDto?> GetProductByIdAsync(int id);
 
     Task<IEnumerable<ProductListDto>> SearchProductsByNameAsync(string query);
+
+    Task<IEnumerable<ProductListDto>> GetProductsByCategoryAsync(int categoryId);
 }

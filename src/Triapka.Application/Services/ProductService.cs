@@ -24,6 +24,12 @@ public class ProductService(IProductRepository productRepository) : IProductServ
         return products.Select(MapToProductListDto);
     }
 
+    public async Task<IEnumerable<ProductListDto>> GetProductsByCategoryAsync(int categoryId)
+    {
+        var products = await productRepository.GetByCategoryAsync(categoryId);
+        return products.Select(MapToProductListDto);
+    }
+
     private static ProductListDto MapToProductListDto(Product p)
     {
         return new ProductListDto

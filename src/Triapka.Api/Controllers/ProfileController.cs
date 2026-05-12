@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using Triapka.Application.DTOs;
 using Triapka.Domain.Entities;
 
@@ -8,27 +9,16 @@ namespace Triapka.Api.Controllers;
 
 [Authorize]
 [Route("Profile")]
-public class ProfileController : Controller
+public class ProfileController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-
-    public ProfileController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-    }
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return Redirect("/Auth/Login");
-        }
-
-        return View("~/Views/Profile/Index.cshtml", user);
+        return user == null ? Redirect("/Auth/Login") : View("~/Views/Profile/Index.cshtml", user);
     }
 
     [HttpGet("Edit")]
@@ -104,7 +94,7 @@ public class ProfileController : Controller
     public async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
     {
         if (!ModelState.IsValid)
-            {
+        {
             return View("~/Views/Profile/ChangePassword.cshtml", dto);
         }
 
