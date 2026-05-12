@@ -23,10 +23,7 @@ public class AuthController(
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        if (dto is null)
-        {
-            throw new ArgumentNullException(nameof(dto));
-        }
+        ArgumentNullException.ThrowIfNull(dto);
 
         if (!ModelState.IsValid)
         {
@@ -85,12 +82,9 @@ public class AuthController(
 
         var success = await authService.ConfirmEmailAsync(userId, token);
 
-        if (!success)
-        {
-            return BadRequest(new { message = "Не вдалося підтвердити email. Посилання недійсне або застаріле." });
-        }
-
-        return Ok(new { message = "Email успішно підтверджено. Тепер ви можете увійти." });
+        return !success
+            ? BadRequest(new { message = "Не вдалося підтвердити email. Посилання недійсне або застаріле." })
+            : Ok(new { message = "Email успішно підтверджено. Тепер ви можете увійти." });
     }
 
     /// <summary>
@@ -108,12 +102,7 @@ public class AuthController(
 
         var success = await authService.LoginAsync(dto);
 
-        if (!success)
-        {
-            return Unauthorized(new { message = "Невірний email або пароль." });
-        }
-
-        return Ok(new { message = "Вхід успішний." });
+        return !success ? Unauthorized(new { message = "Невірний email або пароль." }) : Ok(new { message = "Вхід успішний." });
     }
 
     /// <summary>
@@ -141,7 +130,7 @@ public class AuthController(
             httpContextAccessor.HttpContext!,
             action: nameof(ResetPassword),
             controller: "Auth",
-            values: new { email = dto.Email, token = token });
+            values: new { email = dto.Email, token });
 
         logger.LogInformation(
             "Посилання для відновлення пароля для {Email}: {Link}",

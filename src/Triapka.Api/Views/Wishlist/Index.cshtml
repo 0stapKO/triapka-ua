@@ -103,7 +103,9 @@
                 <div class="header-actions">
                     <a class="icon-btn" asp-controller="Cart" asp-action="Index"><i data-lucide="shopping-cart"></i></a>
                     <a class="icon-btn" asp-controller="Wishlist" asp-action="Index"><i data-lucide="heart"></i></a>
-                    <a class="icon-btn" href="#"><i data-lucide="user"></i></a>
+                    <a class="icon-btn" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
+                        <i data-lucide="user" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
+                    </a>
                 </div>
             </div>
         </header>

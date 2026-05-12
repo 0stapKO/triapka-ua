@@ -458,7 +458,11 @@
                         {
                             foreach (var cat in categories)
                             {
-                                <li><a href="#">@cat.Name</a></li>
+                                <li>
+                                    <a asp-controller="Products" asp-action="ByCategory" asp-route-categoryId="@cat.CategoryId">
+                                        @cat.Name
+                                    </a>
+                                </li>
                             }
                         }
                     }
