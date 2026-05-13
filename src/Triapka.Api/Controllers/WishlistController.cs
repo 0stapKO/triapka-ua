@@ -24,9 +24,16 @@ public class WishlistController(
     [HttpPost]
     public async Task<IActionResult> Add(int productId)
     {
-        await _wishlistService.AddToWishlistAsync(productId);
-        _logger.LogInformation("Product {ProductId} was added to the wishlist", productId);
-        return RedirectToAction(nameof(Index));
+        var (_, isNew) = await _wishlistService.AddToWishlistAsync(productId);
+        if (isNew)
+        {
+            _logger.LogInformation("Product {ProductId} was added to the wishlist", productId);
+            return Json(new { success = true, message = "Товар додано до вподобань" });
+        }
+        else
+        {
+            return Json(new { success = false, message = "Товар вже є у вподобаних" });
+        }
     }
 
     [HttpPost]
