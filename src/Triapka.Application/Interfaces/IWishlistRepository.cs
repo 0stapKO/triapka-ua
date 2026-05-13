@@ -4,9 +4,9 @@ namespace Triapka.Application.Interfaces;
 
 public interface IWishlistRepository
 {
-    Task<IEnumerable<WishlistItem>> GetByUserIdAsync(int userId);
+    Task<IEnumerable<WishlistItem>> GetByUserIdAsync(string userId);
 
-    Task<WishlistItem> AddAsync(int userId, int productId);
+    Task<WishlistItem> AddAsync(string userId, int productId);
 
     Task<WishlistItem?> RemoveAsync(int wishlistItemId);
 }

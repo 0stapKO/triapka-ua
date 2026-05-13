@@ -1,22 +1,20 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Api.Controllers;
 
-public class ProductsController : Controller
+[Authorize(Roles = "Admin")]
+public class ProductsController(
+    IProductService productService,
+    ILogger<ProductsController> logger) : Controller
 {
-    private readonly IProductService _productService;
-    private readonly ILogger<ProductsController> _logger;
-
-    public ProductsController(
-        IProductService productService,
-        ILogger<ProductsController> logger)
-    {
-        _productService = productService;
-        _logger = logger;
-    }
+    private readonly IProductService _productService = productService;
+    private readonly ILogger<ProductsController> _logger = logger;
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> Index(string? search)
     {
         IEnumerable<Triapka.Application.DTOs.ProductListDto> products;
@@ -35,6 +33,15 @@ public class ProductsController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> ByCategory(int categoryId)
+    {
+        var products = await _productService.GetProductsByCategoryAsync(categoryId);
+        return View("Index", products);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int id)
     {
         var product = await _productService.GetProductByIdAsync(id);

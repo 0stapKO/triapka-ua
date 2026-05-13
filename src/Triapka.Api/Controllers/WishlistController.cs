@@ -1,21 +1,18 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Api.Controllers;
 
-public class WishlistController : Controller
+[Authorize]
+public class WishlistController(
+    IWishlistService wishlistService,
+    ILogger<WishlistController> logger) : Controller
 {
-    private readonly IWishlistService _wishlistService;
-    private readonly ILogger<WishlistController> _logger;
-
-    public WishlistController(
-        IWishlistService wishlistService,
-        ILogger<WishlistController> logger)
-    {
-        _wishlistService = wishlistService;
-        _logger = logger;
-    }
+    private readonly IWishlistService _wishlistService = wishlistService;
+    private readonly ILogger<WishlistController> _logger = logger;
 
     [HttpGet]
     public async Task<IActionResult> Index()

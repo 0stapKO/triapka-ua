@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Api.Controllers;
 
+[Authorize]
 public class CartController : Controller
 {
     private readonly ICartService _cartService;
