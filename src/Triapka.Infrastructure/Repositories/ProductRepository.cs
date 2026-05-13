@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
@@ -25,10 +25,20 @@ namespace Triapka.Infrastructure.Repositories
 
         public async Task<IEnumerable<Product>> SearchByNameAsync(string query)
         {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return await context.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.Images)
+                    .ToListAsync();
+            }
+
+            var clearedQuery = query.Trim();
+
             return await context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Images)
-                .Where(p => p.Name.ToLower().Contains(query))
+                .Where(p => EF.Functions.ILike(p.Name, $"%{clearedQuery}%"))
                 .ToListAsync();
         }
 
