@@ -51,7 +51,6 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
             .Include(w => w.Product)
                 .ThenInclude(p => p.Images)
             .FirstAsync(w => w.WishlistItemId == entry.Entity.WishlistItemId);
-            
         return (newItem, true);
     }
 
