@@ -463,6 +463,41 @@
             .search-bar { order: 3; max-width: 100%; }
             .tabs { overflow-x: auto; max-width: 100%; white-space: nowrap; }
         }
+
+        .interactive-rating {
+            display: inline-flex;
+            flex-direction: row-reverse; 
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+        .interactive-rating input {
+            display: none;
+        }
+        .interactive-rating label {
+            cursor: pointer;
+            padding: 0 4px;
+            color: rgba(0,0,0,.15);
+            transition: 0.2s;
+        }
+        .interactive-rating label svg {
+            width: 36px;
+            height: 36px;
+            stroke-width: 2px;
+            fill: transparent;
+            transition: 0.2s;
+        }
+        
+        .interactive-rating input:checked ~ label svg,
+        .interactive-rating label:hover svg,
+        .interactive-rating label:hover ~ label svg {
+            fill: #e6dd70;
+            color: #e6dd70;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .interactive-rating label:hover {
+            transform: scale(1.15);
+        }
     </style>
 </head>
 <body>
@@ -525,28 +560,68 @@
                                 <div class="ph">Image</div>
                             }
                         </div>
-                        <div class="stars" aria-label="Rating">
-                            @{
-                                double rating = (double)(m.Rating ?? 0);
-                                int fullStars = (int)Math.Floor(rating);
-                                bool hasHalf = rating - fullStars >= 0.5;
-                                int emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+                       <div style="display: flex; align-items: center; gap: 12px; margin-left: 20px; margin-bottom: 20px;">
+                            <div class="stars" aria-label="Rating" style="margin-left: 0;">
+                                @{
+                                    double rating = (double)(m.Rating ?? 0);
+                                    int fullStars = (int)Math.Floor(rating);
+                                    bool hasHalf = rating - fullStars >= 0.5;
+                                    int emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
 
-                                if(fullStars < 0) fullStars = 0;
-                                if(emptyStars < 0) emptyStars = 0;
-                                if(fullStars > 5) fullStars = 5;
-                            }
-                            @for (int i = 0; i < fullStars; i++)
+                                    if(fullStars < 0) fullStars = 0;
+                                    if(emptyStars < 0) emptyStars = 0;
+                                    if(fullStars > 5) fullStars = 5;
+                                }
+                                @for (int i = 0; i < fullStars; i++)
+                                {
+                                    <i data-lucide="star" class="star-style star-filled"></i>
+                                }
+                                @if (hasHalf && fullStars < 5)
+                                {
+                                    <i data-lucide="star-half" class="star-style star-filled"></i>
+                                }
+                                @for (int i = 0; i < emptyStars; i++)
+                                {
+                                    <i data-lucide="star" class="star-style star-empty"></i>
+                                }
+                            </div>
+                           @if (m.Reviews != null && m.Reviews.Any())
                             {
-                                <i data-lucide="star" class="star-style star-filled"></i>
+                                int count = m.Reviews.Count;
+                                string word = "оцінок";
+                                int rem100 = count % 100;
+                                int rem10 = count % 10;
+
+                                if (rem100 >= 11 && rem100 <= 14)
+                                {
+                                    word = "оцінок";
+                                }
+                                else if (rem10 == 1)
+                                {
+                                    word = "оцінка";
+                                }
+                                else if (rem10 >= 2 && rem10 <= 4)
+                                {
+                                    word = "оцінки";
+                                }
+
+                                <div style="display: flex; align-items: baseline; gap: 8px;">
+                                    <span style="font-size: 24px; font-weight: 800; color: var(--text);">
+                                        @rating.ToString("0.0")
+                                    </span>
+                                    <a href="javascript:void(0)" onclick="document.querySelector('[data-target=\'tab-reviews\']').click()" 
+                                       style="font-size: 16px; color: var(--muted); text-decoration: underline; cursor: pointer; transition: 0.2s;"
+                                       onmouseover="this.style.color='var(--accent)'" 
+                                       onmouseout="this.style.color='var(--muted)'">
+                                        (@count @word)
+                                    </a>
+                                </div>
                             }
-                            @if (hasHalf && fullStars < 5)
+                            else
                             {
-                                <i data-lucide="star-half" class="star-style star-filled"></i>
-                            }
-                            @for (int i = 0; i < emptyStars; i++)
-                            {
-                                <i data-lucide="star" class="star-style star-empty"></i>
+                                <span style="font-size: 16px; color: var(--muted); font-weight: 500;">
+                                    (Ще немає оцінок)
+                                </span>
                             }
                         </div>
                     </div>
@@ -586,20 +661,88 @@
             <!-- Tab: Відгуки -->
             <div class="tab-content" id="tab-reviews">
                 <div class="static-list">
-                    <div class="review-item">
-                        <div class="review-author">Прізвище та ім'я</div>
-                        <div class="review-stars">
-                            <i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-empty" style="width:20px;height:20px;"></i>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div style="background: var(--panel-2); padding: 24px; border-radius: var(--r-md); margin-bottom: 32px;">
+                            <h3 style="margin-top: 0; margin-bottom: 16px; font-size: 22px; color: var(--text);">Залишити відгук</h3>
+                            
+                            <form asp-controller="Reviews" asp-action="Add" method="post" style="display: flex; flex-direction: column; gap: 16px;">
+                                <input type="hidden" name="ProductId" value="@m.ProductId" />
+                                
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text);">Ваша оцінка:</label>
+                                    
+                                    <div class="interactive-rating">
+                                        <input type="radio" id="star5" name="Rating" value="5" required />
+                                        <label for="star5" title="5 зірок - Відмінно"><i data-lucide="star"></i></label>
+                                        
+                                        <input type="radio" id="star4" name="Rating" value="4" />
+                                        <label for="star4" title="4 зірки - Добре"><i data-lucide="star"></i></label>
+                                        
+                                        <input type="radio" id="star3" name="Rating" value="3" />
+                                        <label for="star3" title="3 зірки - Нормально"><i data-lucide="star"></i></label>
+                                        
+                                        <input type="radio" id="star2" name="Rating" value="2" />
+                                        <label for="star2" title="2 зірки - Погано"><i data-lucide="star"></i></label>
+                                        
+                                        <input type="radio" id="star1" name="Rating" value="1" />
+                                        <label for="star1" title="1 зірка - Жахливо"><i data-lucide="star"></i></label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text);">Ваш коментар:</label>
+                                    <textarea name="Comment" required rows="3" placeholder="Напишіть свої враження від товару..." style="width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--stroke); background: var(--bg); color: var(--text); font-family: inherit; font-size: 18px; resize: vertical; outline: none;"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn-add" style="padding: 12px 24px; font-size: 18px; width: fit-content;">
+                                    Відправити відгук
+                                </button>
+                            </form>
                         </div>
-                        <div class="review-text">івлломлдаомлосядлмідвлмддослос</div>
-                    </div>
-                    <div class="review-item">
-                        <div class="review-author">Прізвище та ім'я</div>
-                        <div class="review-stars">
-                            <i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i><i data-lucide="star" class="star-style star-empty" style="width:20px;height:20px;"></i>
+                    }
+                    else
+                    {
+                        <div style="background: rgba(32,201,151,.1); border: 1px solid rgba(32,201,151,.3); padding: 20px; border-radius: var(--r-md); margin-bottom: 32px; text-align: center;">
+                            <p style="margin: 0; color: var(--text);">
+                                Будь ласка, <a asp-controller="Auth" asp-action="Login" style="color: var(--mint-2); font-weight: 700; text-decoration: underline;">увійдіть в систему</a>, щоб залишити відгук.
+                            </p>
                         </div>
-                        <div class="review-text">івлломлдаомлосядлмідвлмддослос</div>
-                    </div>
+                    }
+
+                    @if (m.Reviews != null && m.Reviews.Any())
+                    {
+                        foreach (var review in m.Reviews.OrderByDescending(r => r.CreatedAt))
+                        {
+                            <div class="review-item" style="border-bottom: 1px solid var(--stroke); padding-bottom: 20px; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div class="review-author">@review.UserName</div> 
+                                    <div style="font-size: 16px; color: var(--muted);">@review.CreatedAt.ToString("dd.MM.yyyy")</div>
+                                </div>
+                                
+                                <div class="review-stars" style="margin-top: 4px; margin-bottom: 12px;">
+                                    @for (int i = 0; i < review.Rating; i++)
+                                    {
+                                        <i data-lucide="star" class="star-style star-filled" style="width:20px;height:20px;"></i>
+                                    }
+                                    @for (int i = 0; i < (5 - review.Rating); i++)
+                                    {
+                                        <i data-lucide="star" class="star-style star-empty" style="width:20px;height:20px;"></i>
+                                    }
+                                </div>
+                                
+                                <div class="review-text">@review.Comment</div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div style="text-align: center; padding: 40px 0;">
+                            <i data-lucide="message-square" style="width: 48px; height: 48px; color: var(--stroke); margin-bottom: 16px;"></i>
+                            <p style="color: var(--muted); font-size: 20px; margin: 0;">Ще немає відгуків. Будьте першим!</p>
+                        </div>
+                    }
                 </div>
             </div>
 

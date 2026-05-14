@@ -14,4 +14,6 @@ public class ProductDetailsDto
     public string CategoryName { get; set; } = null!;
 
     public decimal? Rating { get; set; }
+
+    public List<ReviewDto> Reviews { get; set; } = [];
 }
