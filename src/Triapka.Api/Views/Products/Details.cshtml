@@ -560,28 +560,68 @@
                                 <div class="ph">Image</div>
                             }
                         </div>
-                        <div class="stars" aria-label="Rating">
-                            @{
-                                double rating = (double)(m.Rating ?? 0);
-                                int fullStars = (int)Math.Floor(rating);
-                                bool hasHalf = rating - fullStars >= 0.5;
-                                int emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+                       <div style="display: flex; align-items: center; gap: 12px; margin-left: 20px; margin-bottom: 20px;">
+                            <div class="stars" aria-label="Rating" style="margin-left: 0;">
+                                @{
+                                    double rating = (double)(m.Rating ?? 0);
+                                    int fullStars = (int)Math.Floor(rating);
+                                    bool hasHalf = rating - fullStars >= 0.5;
+                                    int emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
 
-                                if(fullStars < 0) fullStars = 0;
-                                if(emptyStars < 0) emptyStars = 0;
-                                if(fullStars > 5) fullStars = 5;
-                            }
-                            @for (int i = 0; i < fullStars; i++)
+                                    if(fullStars < 0) fullStars = 0;
+                                    if(emptyStars < 0) emptyStars = 0;
+                                    if(fullStars > 5) fullStars = 5;
+                                }
+                                @for (int i = 0; i < fullStars; i++)
+                                {
+                                    <i data-lucide="star" class="star-style star-filled"></i>
+                                }
+                                @if (hasHalf && fullStars < 5)
+                                {
+                                    <i data-lucide="star-half" class="star-style star-filled"></i>
+                                }
+                                @for (int i = 0; i < emptyStars; i++)
+                                {
+                                    <i data-lucide="star" class="star-style star-empty"></i>
+                                }
+                            </div>
+                           @if (m.Reviews != null && m.Reviews.Any())
                             {
-                                <i data-lucide="star" class="star-style star-filled"></i>
+                                int count = m.Reviews.Count;
+                                string word = "оцінок";
+                                int rem100 = count % 100;
+                                int rem10 = count % 10;
+
+                                if (rem100 >= 11 && rem100 <= 14)
+                                {
+                                    word = "оцінок";
+                                }
+                                else if (rem10 == 1)
+                                {
+                                    word = "оцінка";
+                                }
+                                else if (rem10 >= 2 && rem10 <= 4)
+                                {
+                                    word = "оцінки";
+                                }
+
+                                <div style="display: flex; align-items: baseline; gap: 8px;">
+                                    <span style="font-size: 24px; font-weight: 800; color: var(--text);">
+                                        @rating.ToString("0.0")
+                                    </span>
+                                    <a href="javascript:void(0)" onclick="document.querySelector('[data-target=\'tab-reviews\']').click()" 
+                                       style="font-size: 16px; color: var(--muted); text-decoration: underline; cursor: pointer; transition: 0.2s;"
+                                       onmouseover="this.style.color='var(--accent)'" 
+                                       onmouseout="this.style.color='var(--muted)'">
+                                        (@count @word)
+                                    </a>
+                                </div>
                             }
-                            @if (hasHalf && fullStars < 5)
+                            else
                             {
-                                <i data-lucide="star-half" class="star-style star-filled"></i>
-                            }
-                            @for (int i = 0; i < emptyStars; i++)
-                            {
-                                <i data-lucide="star" class="star-style star-empty"></i>
+                                <span style="font-size: 16px; color: var(--muted); font-weight: 500;">
+                                    (Ще немає оцінок)
+                                </span>
                             }
                         </div>
                     </div>
@@ -677,7 +717,8 @@
                         {
                             <div class="review-item" style="border-bottom: 1px solid var(--stroke); padding-bottom: 20px; margin-bottom: 20px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div class="review-author">Користувач</div> <div style="font-size: 16px; color: var(--muted);">@review.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                                    <div class="review-author">@review.UserName</div> 
+                                    <div style="font-size: 16px; color: var(--muted);">@review.CreatedAt.ToString("dd.MM.yyyy")</div>
                                 </div>
                                 
                                 <div class="review-stars" style="margin-top: 4px; margin-bottom: 12px;">

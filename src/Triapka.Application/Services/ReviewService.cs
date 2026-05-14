@@ -10,13 +10,13 @@ using Triapka.Application.DTOs;
 
 public class ReviewService : IReviewService
 {
-    private readonly IReviewRepository reviewRepository;
-    private readonly IProductRepository productRepository;
+    private readonly IReviewRepository _reviewRepository;
+    private readonly IProductRepository _productRepository;
 
     public ReviewService(IReviewRepository reviewRepository, IProductRepository productRepository)
     {
-        this.reviewRepository = reviewRepository;
-        this.productRepository = productRepository;
+        this._reviewRepository = reviewRepository;
+        this._productRepository = productRepository;
     }
 
     public async Task AddReviewAsync(CreateReview dto)
@@ -30,14 +30,14 @@ public class ReviewService : IReviewService
             CreatedAt = DateTime.UtcNow
         };
 
-        await reviewRepository.AddReviewAsync(review);
+        await _reviewRepository.AddReviewAsync(review);
 
         await UpdateProductRatingAsync(dto.ProductId);
     }
 
     public async Task<IEnumerable<ReviewDto>> GetReviewsByProductIdAsync(int productId)
     {
-        var reviews = await reviewRepository.GetReviewsByProductIdAsync(productId);
+        var reviews = await _reviewRepository.GetReviewsByProductIdAsync(productId);
 
         return reviews.Select(r => new ReviewDto
         {
@@ -52,7 +52,7 @@ public class ReviewService : IReviewService
 
     public async Task<ReviewDto?> GetReviewByIdAsync(int reviewId)
     {
-        var review = await reviewRepository.GetReviewByIdAsync(reviewId);
+        var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
 
         if (review == null)
         {
@@ -72,14 +72,14 @@ public class ReviewService : IReviewService
 
     public async Task UpdateReviewAsync(ReviewDto dto)
     {
-        var review = await reviewRepository.GetReviewByIdAsync(dto.ReviewId);
+        var review = await _reviewRepository.GetReviewByIdAsync(dto.ReviewId);
 
         if (review != null)
         {
             review.Rating = dto.Rating;
             review.Comment = dto.Comment;
 
-            await reviewRepository.UpdateReviewAsync(review);
+            await _reviewRepository.UpdateReviewAsync(review);
 
             await UpdateProductRatingAsync(review.ProductId);
         }
@@ -87,13 +87,13 @@ public class ReviewService : IReviewService
 
     public async Task DeleteReviewAsync(int reviewId)
     {
-        var review = await reviewRepository.GetReviewByIdAsync(reviewId);
+        var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
 
         if (review != null)
         {
             var productId = review.ProductId;
 
-            await reviewRepository.DeleteReviewAsync(reviewId);
+            await _reviewRepository.DeleteReviewAsync(reviewId);
 
             await UpdateProductRatingAsync(productId);
         }
@@ -101,8 +101,8 @@ public class ReviewService : IReviewService
 
     private async Task UpdateProductRatingAsync(int productId)
     {
-        var allReviews = await reviewRepository.GetReviewsByProductIdAsync(productId);
-        var product = await productRepository.GetByIdAsync(productId);
+        var allReviews = await _reviewRepository.GetReviewsByProductIdAsync(productId);
+        var product = await _productRepository.GetByIdAsync(productId);
 
         if (product != null)
         {
@@ -115,7 +115,7 @@ public class ReviewService : IReviewService
                 product.Rating = 0;
             }
 
-            await productRepository.UpdateProductAsync(product);
+            await _productRepository.UpdateProductAsync(product);
         }
     }
 }

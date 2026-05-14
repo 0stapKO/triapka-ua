@@ -15,7 +15,10 @@ public class ReviewRepository(ApplicationDbContext context) : IReviewRepository
 
     public async Task<IEnumerable<Review>> GetReviewsByProductIdAsync(int productId)
     {
-        return await context.Reviews.Where(r => r.ProductId == productId).ToListAsync();
+        return await context.Reviews
+            .Include(r => r.User)
+            .Where(r => r.ProductId == productId)
+            .ToListAsync();
     }
 
     public async Task<Review?> GetReviewByIdAsync(int reviewId)
