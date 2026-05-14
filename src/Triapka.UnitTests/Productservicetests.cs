@@ -15,11 +15,15 @@ public class ProductServiceTests
     private readonly Mock<IProductRepository> _repositoryMock;
     private readonly ProductService _sut;
 
+    private readonly Mock<IReviewRepository> _reviewRepositoryMock;
+
     public ProductServiceTests()
     {
         _repositoryMock = new Mock<IProductRepository>();
-        _sut = new ProductService(_repositoryMock.Object);
+        _reviewRepositoryMock = new Mock<IReviewRepository>();
+        _sut = new ProductService(_repositoryMock.Object, _reviewRepositoryMock.Object);
     }
+
 
     [Fact]
     public async Task GetAllProductsAsync_WhenRepositoryReturnsProducts_ShouldReturnMappedDtos()
