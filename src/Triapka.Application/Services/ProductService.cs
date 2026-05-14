@@ -4,7 +4,7 @@ using Triapka.Domain.Entities;
 
 namespace Triapka.Application.Services;
 
-public class ProductService(IProductRepository productRepository) : IProductService
+public class ProductService(IProductRepository productRepository, IReviewRepository reviewRepository) : IProductService
 {
     public async Task<IEnumerable<ProductListDto>> GetAllProductsAsync()
     {
@@ -15,7 +15,44 @@ public class ProductService(IProductRepository productRepository) : IProductServ
     public async Task<ProductDetailsDto?> GetProductByIdAsync(int id)
     {
         var product = await productRepository.GetByIdAsync(id);
-        return product == null ? null : MapToProductDetailsDto(product);
+        if (product == null)
+        {
+            return null;
+        }
+
+        var dto = MapToProductDetailsDto(product);
+
+        var reviews = await reviewRepository.GetReviewsByProductIdAsync(id);
+
+        dto.Reviews = reviews.Select(r =>
+        {
+            string displayName = "Користувач";
+
+            if (r.User != null)
+            {
+                if (!string.IsNullOrWhiteSpace(r.User.FirstName))
+                {
+                    displayName = $"{r.User.FirstName} {r.User.LastName}".Trim();
+                }
+                else if (!string.IsNullOrEmpty(r.User.UserName))
+                {
+                    displayName = r.User.UserName.Split('@')[0];
+                }
+            }
+
+            return new ReviewDto
+            {
+                ReviewId = r.ReviewId,
+                ProductId = r.ProductId,
+                UserId = r.UserId,
+                UserName = displayName,
+                Rating = r.Rating,
+                Comment = r.Comment,
+                CreatedAt = r.CreatedAt
+            };
+        }).ToList();
+
+        return dto;
     }
 
     public async Task<IEnumerable<ProductListDto>> SearchProductsByNameAsync(string query)
