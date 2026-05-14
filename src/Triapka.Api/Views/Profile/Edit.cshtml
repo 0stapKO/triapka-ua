@@ -384,23 +384,27 @@
 
                 <form asp-action="Edit" asp-controller="Profile" method="post">
                     <div class="form-group">
-                        <label for="FirstName">Ім'я</label>
-                        <input type="text" id="FirstName" name="FirstName" class="form-control" value="@Model.FirstName" placeholder="Введіть ім'я" />
+                        <label asp-for="FirstName">Ім'я</label>
+                        <input asp-for="FirstName" class="form-control" placeholder="Введіть ім'я" />
+                        <span asp-validation-for="FirstName" style="color: #dc3545; font-size: 14px; margin-top: 4px; display: block;"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="LastName">Прізвище</label>
-                        <input type="text" id="LastName" name="LastName" class="form-control" value="@Model.LastName" placeholder="Введіть прізвище" />
+                        <label asp-for="LastName">Прізвище</label>
+                        <input asp-for="LastName" class="form-control" placeholder="Введіть прізвище" />
+                        <span asp-validation-for="LastName" style="color: #dc3545; font-size: 14px; margin-top: 4px; display: block;"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="PhoneNumber">Телефон</label>
-                        <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="@Model.PhoneNumber" placeholder="+38 (000) 000-00-00" />
+                        <label asp-for="PhoneNumber">Телефон</label>
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="+380XXXXXXXXX" pattern="^\+380\d{9}$" title="Формат: +380XXXXXXXXX" />
+                        <span asp-validation-for="PhoneNumber" style="color: #dc3545; font-size: 14px; margin-top: 4px; display: block;"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="Address">Адреса</label>
-                        <input type="text" id="Address" name="Address" class="form-control" value="@Model.Address" placeholder="Ваша адреса" />
+                        <label asp-for="Address">Адреса</label>
+                        <input asp-for="Address" class="form-control" placeholder="Ваша адреса" />
+                        <span asp-validation-for="Address" style="color: #dc3545; font-size: 14px; margin-top: 4px; display: block;"></span>
                     </div>
 
                     <div style="display: flex; align-items: center;">
@@ -412,8 +416,24 @@
         </div>
     </div>
     
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         lucide.createIcons();
+        
+        $(document).ready(function() {
+            console.log("Initializing phone mask...");
+            if ($.isFunction($.fn.mask)) {
+                $('input[name="PhoneNumber"]').mask('+380000000000', {
+                    placeholder: "+380XXXXXXXXX"
+                });
+                console.log("Mask applied successfully.");
+            } else {
+                console.error("jQuery Mask plugin is not loaded!");
+            }
+        });
     </script>
 </body>
 </html>
