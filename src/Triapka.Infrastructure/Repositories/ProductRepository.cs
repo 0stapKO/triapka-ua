@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
@@ -34,11 +35,12 @@ namespace Triapka.Infrastructure.Repositories
             }
 
             var clearedQuery = query.Trim();
+            var processedQuery = Regex.Replace(clearedQuery, @"\s+", "%");
 
             return await context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Images)
-                .Where(p => EF.Functions.ILike(p.Name, $"%{clearedQuery}%"))
+                .Where(p => EF.Functions.ILike(p.Name, $"%{processedQuery}%"))
                 .ToListAsync();
         }
 
