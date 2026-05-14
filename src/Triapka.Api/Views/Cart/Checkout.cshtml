@@ -1,0 +1,65 @@
+@model Triapka.Application.DTOs.CheckoutDto
+@{
+    Layout = null;
+    var cart = ViewBag.Cart as Triapka.Application.DTOs.CartDto;
+}
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TRIAPKA.UA — Оформлення замовлення</title>
+    <style>
+        body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #f8f9fa; color: #212529; }
+        .wrap { max-width: 920px; margin: 40px auto; background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 8px 30px rgba(0,0,0,.08); }
+        h1 { margin-top: 0; }
+        .field { margin-bottom: 16px; }
+        label { display: block; font-weight: 700; margin-bottom: 6px; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ced4da; font-size: 16px; }
+        .summary { background: #f8f9fa; border-radius: 12px; padding: 16px; margin: 20px 0; }
+        .summary-row { display: flex; justify-content: space-between; margin: 8px 0; }
+        .total { font-weight: 800; font-size: 20px; }
+        .btn { border: 0; border-radius: 999px; padding: 12px 24px; font-size: 16px; cursor: pointer; }
+        .btn-primary { background: #20c997; color: #fff; font-weight: 700; }
+        .btn-link { margin-right: 12px; text-decoration: none; color: #212529; }
+        .error { color: #dc3545; font-size: 14px; }
+        .validation-summary-errors ul { margin: 0 0 16px; padding-left: 18px; color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>Оформлення замовлення</h1>
+        <p>Заповніть адресу та телефон для доставки.</p>
+
+        @Html.ValidationSummary(excludePropertyErrors: true)
+
+        <form asp-controller="Cart" asp-action="Checkout" method="post">
+            @Html.AntiForgeryToken()
+            <div class="field">
+                <label asp-for="ShippingAddress"></label>
+                <input asp-for="ShippingAddress" />
+                <span asp-validation-for="ShippingAddress" class="error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Phone"></label>
+                <input asp-for="Phone" />
+                <span asp-validation-for="Phone" class="error"></span>
+            </div>
+
+            <div class="summary">
+                <div class="summary-row">
+                    <span>Товарів:</span>
+                    <strong>@(cart?.CartItems.Count ?? 0)</strong>
+                </div>
+                <div class="summary-row total">
+                    <span>До сплати:</span>
+                    <strong>@((cart?.TotalAmount ?? 0).ToString("0.00")) ₴</strong>
+                </div>
+            </div>
+
+            <a class="btn-link" asp-controller="Cart" asp-action="Index">Повернутися в кошик</a>
+            <button class="btn btn-primary" type="submit">Оформити замовлення</button>
+        </form>
+    </div>
+</body>
+</html>

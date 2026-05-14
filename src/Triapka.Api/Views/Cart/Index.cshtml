@@ -215,7 +215,9 @@
                                 <span>До сплати:</span>
                                 <strong>@Model.TotalAmount.ToString("0.00") ₴</strong>
                             </div>
-                            <button class="btn-buy">Купити</button>
+                            <a asp-controller="Cart" asp-action="Checkout" class="btn-buy" style="display: inline-block; text-align: center; text-decoration: none;">
+                                Оформити замовлення
+                            </a>
                         </div>
                     </div>
                 </div>
