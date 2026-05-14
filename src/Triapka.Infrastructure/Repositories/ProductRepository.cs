@@ -28,7 +28,7 @@ namespace Triapka.Infrastructure.Repositories
             return await context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Images)
-                .Where(p => p.Name.ToLower().Contains(query))
+                .Where(p => p.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase))
                 .ToListAsync();
         }
 

@@ -1,0 +1,36 @@
+@model Triapka.Application.DTOs.OrderResultDto
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TRIAPKA.UA — Замовлення успішно оформлено</title>
+    <style>
+        body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #f8f9fa; color: #212529; }
+        .wrap { max-width: 720px; margin: 60px auto; background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 8px 30px rgba(0,0,0,.08); text-align: center; }
+        .ok { font-size: 44px; color: #20c997; margin-bottom: 10px; }
+        .meta { margin: 20px auto; max-width: 380px; text-align: left; background: #f8f9fa; border-radius: 12px; padding: 16px; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .btn { display: inline-block; margin-top: 8px; text-decoration: none; background: #20c997; color: #fff; border-radius: 999px; padding: 12px 24px; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="ok">✔</div>
+        <h1>Замовлення успішно оформлено</h1>
+        <p>Дякуємо за покупку! Ваше замовлення вже обробляється.</p>
+
+        <div class="meta">
+            <div class="row"><span>Номер:</span><strong>#@Model.OrderId</strong></div>
+            <div class="row"><span>Статус:</span><strong>@Model.Status</strong></div>
+            <div class="row"><span>Позицій:</span><strong>@Model.TotalItems</strong></div>
+            <div class="row"><span>Сума:</span><strong>@Model.TotalPrice.ToString("0.00") ₴</strong></div>
+        </div>
+
+        <a class="btn" asp-controller="Products" asp-action="Index">Продовжити покупки</a>
+    </div>
+</body>
+</html>
