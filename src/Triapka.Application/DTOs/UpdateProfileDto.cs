@@ -9,7 +9,9 @@ public class UpdateProfileDto
     public string? LastName { get; set; }
 
     [Required(ErrorMessage = "Телефон є обов'язковим")]
+    [Phone(ErrorMessage = "Невірний формат номера телефону")]
     [RegularExpression(@"^\+380\d{9}$", ErrorMessage = "Введіть коректний номер у форматі +380XXXXXXXXX")]
+    [DataType(DataType.PhoneNumber)]
     public string? PhoneNumber { get; set; }
 
     public string? Address { get; set; }
