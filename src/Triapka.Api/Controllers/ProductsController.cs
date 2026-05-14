@@ -15,18 +15,22 @@ public class ProductsController(
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> Index(string? search)
+    public async Task<IActionResult> Index(string? search, int? categoryId)
     {
         IEnumerable<Triapka.Application.DTOs.ProductListDto> products;
 
-        if (string.IsNullOrWhiteSpace(search))
+        if (categoryId.HasValue)
         {
-            products = await _productService.GetAllProductsAsync();
+            products = await _productService.GetProductsByCategoryAsync(categoryId.Value);
         }
-        else
+        else if (!string.IsNullOrWhiteSpace(search))
         {
             _logger.LogInformation("Користувач шукає товар: {SearchQuery}", search);
             products = await _productService.SearchProductsByNameAsync(search);
+        }
+        else
+        {
+            products = await _productService.GetAllProductsAsync();
         }
 
         return View(products);
@@ -37,6 +41,7 @@ public class ProductsController(
     public async Task<IActionResult> ByCategory(int categoryId)
     {
         var products = await _productService.GetProductsByCategoryAsync(categoryId);
+
         return View("Index", products);
     }
 

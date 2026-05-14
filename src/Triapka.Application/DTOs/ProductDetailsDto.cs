@@ -1,4 +1,5 @@
 ﻿namespace Triapka.Application.DTOs;
+
 public class ProductDetailsDto
 {
     public int ProductId { get; set; }
@@ -11,9 +12,13 @@ public class ProductDetailsDto
 
     public List<string> ImageUrls { get; set; } = [];
 
+    public int CategoryId { get; set; }
+
     public string CategoryName { get; set; } = null!;
 
     public decimal? Rating { get; set; }
 
     public List<ReviewDto> Reviews { get; set; } = [];
+
+    public List<ProductListDto> RelatedProducts { get; set; } = [];
 }

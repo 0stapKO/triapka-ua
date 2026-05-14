@@ -22,8 +22,8 @@ public class ProductService(IProductRepository productRepository, IReviewReposit
 
         var dto = MapToProductDetailsDto(product);
 
+        // Отримання відгуків
         var reviews = await reviewRepository.GetReviewsByProductIdAsync(id);
-
         dto.Reviews = reviews.Select(r =>
         {
             string displayName = "Користувач";
@@ -52,6 +52,13 @@ public class ProductService(IProductRepository productRepository, IReviewReposit
             };
         }).ToList();
 
+        // Отримання схожих товарів (4 останні з тієї ж категорії, окрім поточного)
+        if (dto.CategoryId > 0)
+        {
+            var related = await GetRelatedProductsAsync(dto.CategoryId, id);
+            dto.RelatedProducts = related.ToList();
+        }
+
         return dto;
     }
 
@@ -65,6 +72,18 @@ public class ProductService(IProductRepository productRepository, IReviewReposit
     {
         var products = await productRepository.GetByCategoryAsync(categoryId);
         return products.Select(MapToProductListDto);
+    }
+
+    // НОВИЙ МЕТОД: Отримання схожих товарів
+    public async Task<IEnumerable<ProductListDto>> GetRelatedProductsAsync(int categoryId, int currentProductId)
+    {
+        var products = await productRepository.GetByCategoryAsync(categoryId);
+
+        return products
+            .Where(p => p.ProductId != currentProductId)
+            .OrderByDescending(p => p.ProductId)
+            .Take(4)
+            .Select(MapToProductListDto);
     }
 
     private static ProductListDto MapToProductListDto(Product p)
@@ -89,6 +108,7 @@ public class ProductService(IProductRepository productRepository, IReviewReposit
             Price = p.Price,
             ImageUrls = p.Images.Select(static i => i.ImageUrl).ToList(),
             Rating = p.Rating,
+            CategoryId = p.CategoryId,
             CategoryName = p.Category?.Name ?? string.Empty,
         };
     }

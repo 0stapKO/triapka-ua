@@ -1,6 +1,7 @@
 ﻿using Triapka.Application.DTOs;
 
 namespace Triapka.Application.Interfaces;
+
 public interface IProductService
 {
     Task<IEnumerable<ProductListDto>> GetAllProductsAsync();
@@ -10,4 +11,6 @@ public interface IProductService
     Task<IEnumerable<ProductListDto>> SearchProductsByNameAsync(string query);
 
     Task<IEnumerable<ProductListDto>> GetProductsByCategoryAsync(int categoryId);
+
+    Task<IEnumerable<ProductListDto>> GetRelatedProductsAsync(int categoryId, int currentProductId);
 }
