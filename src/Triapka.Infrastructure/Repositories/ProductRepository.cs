@@ -30,5 +30,11 @@ namespace Triapka.Infrastructure.Repositories
                 .Where(p => p.Name.ToLower().Contains(query))
                 .ToListAsync();
         }
+
+        public async Task UpdateProductAsync(Product product)
+        {
+            context.Products.Update(product);
+            await context.SaveChangesAsync();
+        }
     }
 }

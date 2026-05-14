@@ -9,4 +9,6 @@ public interface IProductRepository
     Task<Product?> GetByIdAsync(int id);
 
     Task<IEnumerable<Product>> SearchByNameAsync(string query);
+
+    Task UpdateProductAsync(Product product);
 }
