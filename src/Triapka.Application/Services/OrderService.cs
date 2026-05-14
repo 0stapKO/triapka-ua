@@ -57,4 +57,29 @@ public class OrderService(
             TotalItems = savedOrder.OrderItems.Sum(i => i.Quantity)
         };
     }
+
+    public async Task<IReadOnlyList<OrderDto>> GetUserOrdersAsync(string userId)
+    {
+        var orders = await orderRepository.GetByUserIdAsync(userId);
+
+        return orders.Select(o => new OrderDto
+        {
+            OrderId = o.OrderId,
+            OrderDate = o.OrderDate,
+            TotalPrice = o.TotalPrice,
+            Status = o.Status,
+            ShippingAddress = o.ShippingAddress,
+            Phone = o.Phone,
+            Items = o.OrderItems.Select(oi => new OrderItemDto
+            {
+                OrderItemId = oi.OrderItemId,
+                ProductId = oi.ProductId,
+                ProductName = oi.Product?.Name ?? "Невідомий товар",
+                ImageUrl = oi.Product?.Images?.FirstOrDefault()?.ImageUrl
+                         ?? oi.Product?.ImageUrl,
+                Quantity = oi.Quantity,
+                PriceAtPurchase = oi.PriceAtPurchase
+            }).ToList()
+        }).ToList();
+    }
 }

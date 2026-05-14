@@ -4,16 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 using Triapka.Application.DTOs;
+using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
 
 namespace Triapka.Api.Controllers;
 
 [Authorize]
 [Route("Profile")]
-public class ProfileController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
+public class ProfileController(
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
+    IOrderService orderService) : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly IOrderService _orderService = orderService;
 
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -83,9 +88,16 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
     }
 
     [HttpGet("Orders")]
-    public IActionResult Orders()
+    public async Task<IActionResult> Orders()
     {
-        return View("~/Views/Profile/Orders.cshtml");
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Redirect("/Auth/Login");
+        }
+
+        var orders = await _orderService.GetUserOrdersAsync(user.Id);
+        return View("~/Views/Profile/Orders.cshtml", orders);
     }
 
     [HttpGet("Settings")]
