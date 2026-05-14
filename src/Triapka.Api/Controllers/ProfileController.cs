@@ -60,6 +60,8 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
             
             Log.Information("Updating profile for user {UserId}. New Phone: {Phone}", user.Id, dto.PhoneNumber);
 
+            Log.Information("Updating profile for user {UserId}. New Phone: {Phone}", user.Id, dto.PhoneNumber);
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
@@ -73,8 +75,15 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
         }
         else
         {
+<<<<<<< HEAD
             Log.Warning("Profile update failed validation for user {UserId}. Errors: {Errors}", 
                 user.Id, string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+=======
+            Log.Warning(
+                "Profile update failed validation for user {UserId}. Errors: {Errors}",
+                user.Id,
+                string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+>>>>>>> main
         }
 
         return View("~/Views/Profile/Edit.cshtml", dto);
