@@ -391,7 +391,7 @@
 
                     <div class="form-group">
                         <label asp-for="PhoneNumber">Телефон</label>
-                        <input asp-for="PhoneNumber" class="form-control" placeholder="+380XXXXXXXXX" />
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="+380XXXXXXXXX" pattern="^\+380\d{9}$" title="Формат: +380XXXXXXXXX" />
                         <span asp-validation-for="PhoneNumber" style="color: #dc3545; font-size: 14px; margin-top: 4px; display: block;"></span>
                     </div>
 
