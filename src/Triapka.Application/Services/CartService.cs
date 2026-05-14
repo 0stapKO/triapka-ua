@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 
 using Microsoft.AspNetCore.Http;
 
@@ -58,6 +58,36 @@ public class CartService(
     {
         var updatedCart = await cartRepository.RemoveItemAsync(cartItemId);
         return updatedCart != null ? MapToCartDto(updatedCart) : new CartDto();
+    }
+
+    public async Task<CartDto> UpdateQuantityAsync(int cartItemId, int newQuantity)
+    {
+        if (newQuantity <= 0)
+        {
+            return await RemoveFromCartAsync(cartItemId);
+        }
+
+        var userId = GetCurrentUserId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return new CartDto();
+        }
+
+        var cart = await cartRepository.GetCartByUserIdAsync(userId);
+        if (cart == null)
+        {
+            return new CartDto();
+        }
+
+        var item = cart.CartItems.FirstOrDefault(i => i.CartItemId == cartItemId);
+        if (item != null)
+        {
+            item.Quantity = newQuantity;
+            var updatedCart = await cartRepository.UpdateCartAsync(cart);
+            return MapToCartDto(updatedCart);
+        }
+
+        return MapToCartDto(cart);
     }
 
     private static CartDto MapToCartDto(Cart cart)

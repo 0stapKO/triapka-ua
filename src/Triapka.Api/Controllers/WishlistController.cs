@@ -1,23 +1,18 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 
 namespace Triapka.Api.Controllers;
 
 [Authorize]
-public class WishlistController : Controller
+public class WishlistController(
+    IWishlistService wishlistService,
+    ILogger<WishlistController> logger) : Controller
 {
-    private readonly IWishlistService _wishlistService;
-    private readonly ILogger<WishlistController> _logger;
-
-    public WishlistController(
-        IWishlistService wishlistService,
-        ILogger<WishlistController> logger)
-    {
-        _wishlistService = wishlistService;
-        _logger = logger;
-    }
+    private readonly IWishlistService _wishlistService = wishlistService;
+    private readonly ILogger<WishlistController> _logger = logger;
 
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -29,9 +24,16 @@ public class WishlistController : Controller
     [HttpPost]
     public async Task<IActionResult> Add(int productId)
     {
-        await _wishlistService.AddToWishlistAsync(productId);
-        _logger.LogInformation("Product {ProductId} was added to the wishlist", productId);
-        return RedirectToAction(nameof(Index));
+        var (_, isNew) = await _wishlistService.AddToWishlistAsync(productId);
+        if (isNew)
+        {
+            _logger.LogInformation("Product {ProductId} was added to the wishlist", productId);
+            return Json(new { success = true, message = "Товар додано до вподобань" });
+        }
+        else
+        {
+            return Json(new { success = false, message = "Товар вже є у вподобаних" });
+        }
     }
 
     [HttpPost]

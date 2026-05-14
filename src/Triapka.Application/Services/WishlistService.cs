@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 
 using Microsoft.AspNetCore.Http;
 
@@ -25,7 +25,7 @@ public class WishlistService(
         return items.Select(MapToWishlistItemDto);
     }
 
-    public async Task<WishlistItemDto> AddToWishlistAsync(int productId)
+    public async Task<(WishlistItemDto Item, bool IsNew)> AddToWishlistAsync(int productId)
     {
         var userId = GetCurrentUserId()
             ?? throw new UnauthorizedAccessException("Користувач не авторизований.");
@@ -33,8 +33,8 @@ public class WishlistService(
         _ = await productRepository.GetByIdAsync(productId)
                       ?? throw new InvalidOperationException("Product does not exist.");
 
-        var item = await wishlistRepository.AddAsync(userId, productId);
-        return MapToWishlistItemDto(item);
+        var (item, isNew) = await wishlistRepository.AddAsync(userId, productId);
+        return (MapToWishlistItemDto(item), isNew);
     }
 
     public async Task RemoveFromWishlistAsync(int wishlistItemId)
@@ -46,6 +46,7 @@ public class WishlistService(
     {
         return new WishlistItemDto
         {
+            WishlistItemId = item.WishlistItemId,
             ProductId = item.ProductId,
             ProductName = item.Product.Name,
             Price = item.Product.Price,

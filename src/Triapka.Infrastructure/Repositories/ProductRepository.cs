@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
 
@@ -27,7 +28,21 @@ namespace Triapka.Infrastructure.Repositories
             return await context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Images)
-                .Where(p => p.Name.ToLower().Contains(query))
+                .Where(p => p.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                .ToListAsync();
+        }
+
+        public async Task UpdateProductAsync(Product product)
+        {
+            context.Products.Update(product);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetByCategoryAsync(int categoryId)
+        {
+            return await context.Products
+                .Where(p => p.CategoryId == categoryId)
+                .Include(p => p.Images)
                 .ToListAsync();
         }
     }

@@ -258,14 +258,14 @@
                 </nav>
 
                 <div class="header-actions" aria-label="Actions">
-                    <a class="icon-btn" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">
-                        <i data-lucide="shopping-cart" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent);" : "")" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">
+                        <i data-lucide="shopping-cart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
                     </a>
-                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">
-                        <i data-lucide="heart" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent);" : "")" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">
+                        <i data-lucide="heart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
                     </a>
-                    <a class="icon-btn" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
-                        <i data-lucide="user" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent);" : "")" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
+                        <i data-lucide="user" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
                     </a>
                 </div>
             </div>
