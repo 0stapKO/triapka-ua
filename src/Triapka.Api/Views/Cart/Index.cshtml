@@ -107,10 +107,16 @@
                     <a asp-controller="Products" asp-action="Index">Головна</a>
                     <a asp-controller="Home" asp-action="About">Про нас</a>
                 </nav>
-                <div class="header-actions">
-                    <a class="icon-btn" asp-controller="Cart" asp-action="Index"><i data-lucide="shopping-cart"></i></a>
-                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index"><i data-lucide="heart"></i></a>
-                    <a class="icon-btn" href="#"><i data-lucide="user"></i></a>
+                <div class="header-actions" aria-label="Actions">
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent);" : "")" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">
+                        <i data-lucide="shopping-cart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent);" : "")" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">
+                        <i data-lucide="heart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent);" : "")" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
+                        <i data-lucide="user" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
                 </div>
             </div>
         </header>
@@ -157,21 +163,21 @@
                         <div class="options-row" style="flex-wrap: wrap;">
                             <label for="delivery_np" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
                                 <input type="radio" id="delivery_np" name="DeliveryMethod" value="nova_poshta" checked style="width: 20px; height: 20px; accent-color: var(--accent);" />
-                                <div class="option-circle" style="width: auto; padding: 0 20px; font-size: 20px; font-weight: 600; border-radius: 999px;">
+                                <span class="option-circle" style="width: auto; padding: 0 20px; font-size: 20px; font-weight: 600; border-radius: 999px;">
                                     <i class="bi bi-truck" style="color: var(--accent); margin-right: 10px;"></i> Нова пошта
-                                </div>
+                                </span>
                             </label>
                             <label for="delivery_ukr" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
                                 <input type="radio" id="delivery_ukr" name="DeliveryMethod" value="ukrposhta" style="width: 20px; height: 20px; accent-color: var(--accent);" />
-                                <div class="option-circle" style="width: auto; padding: 0 20px; font-size: 20px; font-weight: 600; border-radius: 999px;">
+                                <span class="option-circle" style="width: auto; padding: 0 20px; font-size: 20px; font-weight: 600; border-radius: 999px;">
                                     <i class="bi bi-mailbox" style="color: var(--accent); margin-right: 10px;"></i> Укрпошта
-                                </div>
+                                </span>
                             </label>
                             <label for="delivery_meest" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
                                 <input type="radio" id="delivery_meest" name="DeliveryMethod" value="meest" style="width: 20px; height: 20px; accent-color: var(--accent);" />
-                                <div class="option-circle" style="width: auto; padding: 0 20px; font-size: 20px; font-weight: 600; border-radius: 999px;">
+                                <span class="option-circle" style="width: auto; padding: 0 20px; font-size: 20px; font-weight: 600; border-radius: 999px;">
                                     <i class="bi bi-box-seam" style="color: var(--accent); margin-right: 10px;"></i> Meest
-                                </div>
+                                </span>
                             </label>
                         </div>
 
@@ -179,15 +185,15 @@
                         <div class="options-row">
                             <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
                                 <input type="radio" name="payment" value="card" checked style="width: 20px; height: 20px; accent-color: var(--accent);" />
-                                <div class="option-circle"><i class="bi bi-credit-card"></i></div>
+                                <span class="option-circle"><i class="bi bi-credit-card"></i></span>
                             </label>
                             <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
                                 <input type="radio" name="payment" value="cash" style="width: 20px; height: 20px; accent-color: var(--accent);" />
-                                <div class="option-circle"><i class="bi bi-cash"></i></div>
+                                <span class="option-circle"><i class="bi bi-cash"></i></span>
                             </label>
                             <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
                                 <input type="radio" name="payment" value="crypto" style="width: 20px; height: 20px; accent-color: var(--accent);" />
-                                <div class="option-circle"><i class="bi bi-currency-bitcoin"></i></div>
+                                <span class="option-circle"><i class="bi bi-currency-bitcoin"></i></span>
                                 <span style="color: red; font-weight: bold; font-size: 20px;">CREDIT</span>
                             </label>
                         </div>

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
 
@@ -31,7 +32,7 @@ public class CartController : Controller
     {
         await _cartService.AddToCartAsync(productId);
         _logger.LogInformation("Product {ProductId} was added to the cart", productId);
-        return RedirectToAction(nameof(Index));
+        return Json(new { success = true, message = "Товар додано в кошик" });
     }
 
     [HttpPost]

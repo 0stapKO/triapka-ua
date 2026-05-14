@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
@@ -16,7 +16,7 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
             .ToListAsync();
     }
 
-    public async Task<WishlistItem> AddAsync(string userId, int productId)
+    public async Task<(WishlistItem Item, bool IsNew)> AddAsync(string userId, int productId)
     {
         var existingItem = await context.WishlistItems
             .Include(w => w.Product)
@@ -25,7 +25,7 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
 
         if (existingItem != null)
         {
-            return existingItem;
+            return (existingItem, false);
         }
 
         var entry = await context.WishlistItems.AddAsync(new WishlistItem
@@ -40,16 +40,18 @@ public class WishlistRepository(ApplicationDbContext context) : IWishlistReposit
         }
         catch (DbUpdateException)
         {
-            return await context.WishlistItems
+            var item = await context.WishlistItems
                 .Include(w => w.Product)
                     .ThenInclude(p => p.Images)
                 .FirstAsync(w => w.UserId == userId && w.ProductId == productId);
+            return (item, false);
         }
 
-        return await context.WishlistItems
+        var newItem = await context.WishlistItems
             .Include(w => w.Product)
                 .ThenInclude(p => p.Images)
             .FirstAsync(w => w.WishlistItemId == entry.Entity.WishlistItemId);
+        return (newItem, true);
     }
 
     public async Task<WishlistItem?> RemoveAsync(int wishlistItemId)

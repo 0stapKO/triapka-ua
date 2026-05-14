@@ -75,11 +75,6 @@ public class AuthService(
         }
 
         var result = await userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
-        if (!result.Succeeded)
-        {
-            return (false, result.Errors.Select(e => e.Description));
-        }
-
-        return (true, []);
+        return !result.Succeeded ? ((bool Success, IEnumerable<string> Errors))(false, result.Errors.Select(e => e.Description)) : ((bool Success, IEnumerable<string> Errors))(true, []);
     }
 }

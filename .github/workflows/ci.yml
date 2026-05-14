@@ -23,3 +23,6 @@ jobs:
       
     - name: Build and analyze
       run: dotnet build TriapkaSolution.sln --no-restore -warnaserror
+
+    - name: Test
+      run: dotnet test TriapkaSolution.sln --no-build --verbosity normal
