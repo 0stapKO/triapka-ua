@@ -436,6 +436,13 @@
                 </nav>
 
                 <div class="header-actions" aria-label="Actions">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="icon-btn" href="/Admin/Newsletter" title="Адмін-панель" aria-label="Адмін-панель"
+                           style="background:linear-gradient(135deg,#20c997,#1aa179);border-color:#1aa179;">
+                            <i data-lucide="shield" style="color:white;width:22px;height:22px;stroke-width:2.5;"></i>
+                        </a>
+                    }
                     <a class="icon-btn" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">
                         <i data-lucide="shopping-cart" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
                     </a>

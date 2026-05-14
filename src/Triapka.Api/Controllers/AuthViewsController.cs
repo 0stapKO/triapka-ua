@@ -179,4 +179,10 @@ public class AuthViewsController : Controller
     {
         return View("~/Views/Auth/ResetPasswordConfirmation.cshtml");
     }
+
+    [HttpGet("AccessDenied")]
+    public IActionResult AccessDenied()
+    {
+        return View("~/Views/Auth/AccessDenied.cshtml");
+    }
 }
