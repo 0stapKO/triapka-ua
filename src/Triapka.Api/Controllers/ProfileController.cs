@@ -57,8 +57,6 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
             user.LastName = dto.LastName;
             user.PhoneNumber = dto.PhoneNumber;
             user.Address = dto.Address;
-            
-            Log.Information("Updating profile for user {UserId}. New Phone: {Phone}", user.Id, dto.PhoneNumber);
 
             Log.Information("Updating profile for user {UserId}. New Phone: {Phone}", user.Id, dto.PhoneNumber);
 
