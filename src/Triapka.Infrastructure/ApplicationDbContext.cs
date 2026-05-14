@@ -90,7 +90,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Product)
             .WithMany()
-            .HasForeignKey(oi => oi.ProductId);
+            .HasForeignKey(oi => oi.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(10,2)");
         modelBuilder.Entity<Product>().Property(p => p.Rating).HasColumnType("decimal(3,2)");
