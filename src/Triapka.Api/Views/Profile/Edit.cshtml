@@ -413,8 +413,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         lucide.createIcons();
+        
+        $(document).ready(function() {
+            console.log("Initializing phone mask...");
+            if ($.isFunction($.fn.mask)) {
+                $('input[name="PhoneNumber"]').mask('+380000000000', {
+                    placeholder: "+380XXXXXXXXX"
+                });
+                console.log("Mask applied successfully.");
+            } else {
+                console.error("jQuery Mask plugin is not loaded!");
+            }
+        });
     </script>
 </body>
 </html>
