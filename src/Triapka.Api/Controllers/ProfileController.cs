@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 using Triapka.Application.DTOs;
 using Triapka.Domain.Entities;
@@ -57,6 +58,8 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
             user.PhoneNumber = dto.PhoneNumber;
             user.Address = dto.Address;
 
+            Log.Information("Updating profile for user {UserId}. New Phone: {Phone}", user.Id, dto.PhoneNumber);
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
@@ -67,6 +70,13 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+        }
+        else
+        {
+            Log.Warning(
+                "Profile update failed validation for user {UserId}. Errors: {Errors}",
+                user.Id,
+                string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
         }
 
         return View("~/Views/Profile/Edit.cshtml", dto);
