@@ -1,8 +1,12 @@
+using System.Security.Claims;
+
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using Triapka.Application.DTOs;
 using Triapka.Application.Interfaces;
+using Triapka.Domain.Entities;
 
 namespace Triapka.Api.Controllers;
 
@@ -12,15 +16,18 @@ public class CartController : Controller
     private readonly ICartService _cartService;
     private readonly IOrderService _orderService;
     private readonly ILogger<CartController> _logger;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public CartController(
         ICartService cartService,
         IOrderService orderService,
-        ILogger<CartController> logger)
+        ILogger<CartController> logger,
+        UserManager<ApplicationUser> userManager)
     {
         _cartService = cartService;
         _orderService = orderService;
         _logger = logger;
+        _userManager = userManager;
     }
 
     [HttpGet]
@@ -57,14 +64,27 @@ public class CartController : Controller
     [HttpGet]
     public async Task<IActionResult> Checkout()
     {
-        CartDto cart = await _cartService.GetCartAsync();
-        if (cart.CartItems.Count == 0)
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Login", "Auth");
         }
 
+        var cart = await _cartService.GetCartAsync();
         ViewBag.Cart = cart;
-        return View(new CheckoutDto());
+
+        var user = await _userManager.FindByIdAsync(userId);
+
+        var model = new CheckoutDto();
+
+        if (user != null)
+        {
+            model.Phone = user.PhoneNumber ?? string.Empty;
+            model.ShippingAddress = user.Address ?? string.Empty;
+        }
+
+        return View(model);
     }
 
     [HttpPost]

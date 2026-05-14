@@ -29,19 +29,19 @@
 <body>
     <div class="wrap">
         <h1>Оформлення замовлення</h1>
-        <p>Заповніть адресу та телефон для доставки.</p>
+        <p>Вкажіть адресу та номер телефону для доставки.</p>
 
         @Html.ValidationSummary(excludePropertyErrors: true)
 
         <form asp-controller="Cart" asp-action="Checkout" method="post">
             @Html.AntiForgeryToken()
             <div class="field">
-                <label asp-for="ShippingAddress"></label>
+                <label asp-for="Адреса доставки"></label>
                 <input asp-for="ShippingAddress" />
                 <span asp-validation-for="ShippingAddress" class="error"></span>
             </div>
             <div class="field">
-                <label asp-for="Phone"></label>
+                <label asp-for="Номер телефону"></label>
                 <input asp-for="Phone" />
                 <span asp-validation-for="Phone" class="error"></span>
             </div>
