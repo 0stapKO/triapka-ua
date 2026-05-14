@@ -425,11 +425,50 @@
         
         $(document).ready(function() {
             console.log("Initializing phone mask...");
+            var phoneInput = $('input[name="PhoneNumber"]');
+            var prefix = '+38';
+
             if ($.isFunction($.fn.mask)) {
-                $('input[name="PhoneNumber"]').mask('+380000000000', {
+                // Initialize mask
+                phoneInput.mask('+380000000000', {
                     placeholder: "+380XXXXXXXXX"
                 });
-                console.log("Mask applied successfully.");
+
+                // Ensure it always starts with prefix
+                if (!phoneInput.val() || !phoneInput.val().startsWith(prefix)) {
+                    phoneInput.val(prefix);
+                }
+
+                phoneInput.on('keydown', function(e) {
+                    // Prevent backspace if it would affect the prefix
+                    if (e.which === 8) { // Backspace
+                        if (this.selectionStart <= prefix.length && this.selectionEnd <= prefix.length) {
+                            e.preventDefault();
+                        }
+                    } 
+                    // Prevent delete if it would affect the prefix
+                    else if (e.which === 46) { // Delete
+                        if (this.selectionStart < prefix.length) {
+                            e.preventDefault();
+                        }
+                    }
+                });
+
+                phoneInput.on('input', function() {
+                    if (!this.value.startsWith(prefix)) {
+                        // Restore prefix if somehow bypassed
+                        var digitsOnly = this.value.replace(/\D/g, '');
+                        // If it starts with 38, keep it, otherwise prepend
+                        if (digitsOnly.startsWith('38')) {
+                            this.value = '+' + digitsOnly;
+                        } else {
+                            this.value = prefix + digitsOnly;
+                        }
+                        $(this).trigger('input.mask');
+                    }
+                });
+
+                console.log("Mask applied and prefix locked.");
             } else {
                 console.error("jQuery Mask plugin is not loaded!");
             }
