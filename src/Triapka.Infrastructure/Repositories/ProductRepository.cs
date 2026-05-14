@@ -1,5 +1,5 @@
+﻿using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 
 using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
