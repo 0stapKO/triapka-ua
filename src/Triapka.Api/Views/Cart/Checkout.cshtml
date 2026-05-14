@@ -10,20 +10,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TRIAPKA.UA — Оформлення замовлення</title>
     <style>
-        body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #f8f9fa; color: #212529; }
-        .wrap { max-width: 920px; margin: 40px auto; background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 8px 30px rgba(0,0,0,.08); }
-        h1 { margin-top: 0; }
-        .field { margin-bottom: 16px; }
-        label { display: block; font-weight: 700; margin-bottom: 6px; }
-        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ced4da; font-size: 16px; }
-        .summary { background: #f8f9fa; border-radius: 12px; padding: 16px; margin: 20px 0; }
-        .summary-row { display: flex; justify-content: space-between; margin: 8px 0; }
-        .total { font-weight: 800; font-size: 20px; }
-        .btn { border: 0; border-radius: 999px; padding: 12px 24px; font-size: 16px; cursor: pointer; }
-        .btn-primary { background: #20c997; color: #fff; font-weight: 700; }
-        .btn-link { margin-right: 12px; text-decoration: none; color: #212529; }
-        .error { color: #dc3545; font-size: 14px; }
-        .validation-summary-errors ul { margin: 0 0 16px; padding-left: 18px; color: #dc3545; }
+        /* Глобальне скидання для правильного розрахунку ширини */
+        * { box-sizing: border-box; }
+        
+        body { 
+            margin: 0; 
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; 
+            background: #f8f9fa; 
+            color: #212529; 
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .wrap { 
+            width: 100%;
+            max-width: 540px; /* Звузив для гармонійнішого вигляду кнопки на 100% */
+            background: #fff; 
+            border-radius: 20px; 
+            padding: 36px 30px; 
+            box-shadow: 0 8px 30px rgba(0,0,0,.08); 
+            height: fit-content;
+            margin-top: 40px;
+        }
+        
+        h1 { margin-top: 0; font-size: 28px; font-weight: 800; }
+        p { color: #6c757d; margin-bottom: 24px; }
+        
+        .field { margin-bottom: 20px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 15px; }
+        
+        input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border-radius: 12px; 
+            border: 1px solid #ced4da; 
+            font-size: 16px; 
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus { border-color: #20c997; }
+        
+        .summary { 
+            background: #f8f9fa; 
+            border-radius: 16px; 
+            padding: 20px; 
+            margin: 28px 0; 
+            border: 1px solid rgba(0,0,0,.05);
+        }
+        .summary-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 10px 0; 
+            color: #495057;
+            font-size: 16px;
+        }
+        .total { 
+            font-weight: 800; 
+            font-size: 22px; 
+            color: #212529;
+            border-top: 1px solid #dee2e6;
+            padding-top: 16px;
+            margin-top: 16px;
+        }
+        
+        .form-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 10px;
+        }
+        
+        .btn { 
+            border: 0; 
+            border-radius: 999px; 
+            padding: 18px 24px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            display: block;
+            text-align: center;
+            width: 100%;
+            transition: 0.2s ease;
+            font-family: inherit;
+        }
+        .btn-primary { 
+            background: #20c997; 
+            color: #fff; 
+            font-weight: 800; 
+            white-space: nowrap; 
+        }
+        .btn-primary:hover { 
+            background: #1aa179; 
+            box-shadow: 0 6px 16px rgba(32, 201, 151, 0.3); 
+            transform: translateY(-1px);
+        }
+        
+        .btn-link { 
+            display: block;
+            text-align: center;
+            text-decoration: none; 
+            color: #6c757d; 
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-link:hover { color: #212529; text-decoration: underline; }
+        
+        .error { color: #dc3545; font-size: 13px; margin-top: 6px; display: block; }
+        .validation-summary-errors ul { margin: 0 0 20px; padding-left: 20px; color: #dc3545; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -35,30 +131,38 @@
 
         <form asp-controller="Cart" asp-action="Checkout" method="post">
             @Html.AntiForgeryToken()
+            
             <div class="field">
-                <label asp-for="Адреса доставки"></label>
-                <input asp-for="ShippingAddress" />
+                <label asp-for="ShippingAddress">Адреса доставки</label>
+                <input asp-for="ShippingAddress" placeholder="Наприклад: м. Львів, вул. Франка, 1" />
                 <span asp-validation-for="ShippingAddress" class="error"></span>
             </div>
+            
             <div class="field">
-                <label asp-for="Номер телефону"></label>
-                <input asp-for="Phone" />
+                <label asp-for="Phone">Номер телефону</label>
+                <input asp-for="Phone" placeholder="+380..." />
                 <span asp-validation-for="Phone" class="error"></span>
             </div>
 
             <div class="summary">
                 <div class="summary-row">
-                    <span>Товарів:</span>
-                    <strong>@(cart?.CartItems.Count ?? 0)</strong>
+                    <span>Товарів у кошику:</span>
+                    <strong>@(cart?.CartItems.Count ?? 0) шт.</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Вартість доставки:</span>
+                    <strong style="color: #20c997;">За тарифами</strong>
                 </div>
                 <div class="summary-row total">
                     <span>До сплати:</span>
-                    <strong>@((cart?.TotalAmount ?? 0).ToString("0.00")) ₴</strong>
+                    <strong style="color: #20c997;">@((cart?.TotalAmount ?? 0).ToString("0.00")) ₴</strong>
                 </div>
             </div>
 
-            <a class="btn-link" asp-controller="Cart" asp-action="Index">Повернутися в кошик</a>
-            <button class="btn btn-primary" type="submit">Оформити замовлення</button>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Оформити замовлення</button>
+                <a class="btn-link" asp-controller="Cart" asp-action="Index">Повернутися в кошик</a>
+            </div>
         </form>
     </div>
 </body>

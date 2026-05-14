@@ -11,24 +11,16 @@ using Triapka.Domain.Entities;
 namespace Triapka.Api.Controllers;
 
 [Authorize]
-public class CartController : Controller
+public class CartController(
+    ICartService cartService,
+    IOrderService orderService,
+    ILogger<CartController> logger,
+    UserManager<ApplicationUser> userManager) : Controller
 {
-    private readonly ICartService _cartService;
-    private readonly IOrderService _orderService;
-    private readonly ILogger<CartController> _logger;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public CartController(
-        ICartService cartService,
-        IOrderService orderService,
-        ILogger<CartController> logger,
-        UserManager<ApplicationUser> userManager)
-    {
-        _cartService = cartService;
-        _orderService = orderService;
-        _logger = logger;
-        _userManager = userManager;
-    }
+    private readonly ICartService _cartService = cartService;
+    private readonly IOrderService _orderService = orderService;
+    private readonly ILogger<CartController> _logger = logger;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     [HttpGet]
     public async Task<IActionResult> Index()

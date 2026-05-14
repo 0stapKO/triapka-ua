@@ -84,8 +84,28 @@
         .summary-total { display: flex; justify-content: space-between; margin-top: 20px; font-size: 22px; font-weight: 800; }
         .summary-total strong { color: var(--accent); font-size: 26px; }
         
-        .btn-buy { width: 100%; padding: 18px; margin-top: 30px; background: var(--accent); color: white; border: none; border-radius: 999px; font-size: 22px; font-weight: 800; cursor: pointer; }
-        
+        .btn-buy { 
+            display: block;
+            width: 100%; 
+            padding: 16px 10px;
+            margin-top: 30px; 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            border-radius: 999px; 
+            font-size: 20px;
+            font-weight: 800; 
+            cursor: pointer; 
+            text-align: center;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: 0.2s ease;
+        }
+        .btn-buy:hover {
+            background: var(--mint-2);
+            box-shadow: 0 6px 16px rgba(32, 201, 151, 0.3); 
+            transform: translateY(-1px);
+        }
         .empty-msg { padding: 40px; text-align: center; font-size: 24px; font-weight: bold; background: var(--panel); border-radius: var(--r-xl); }
     </style>
 </head>
@@ -215,7 +235,7 @@
                                 <span>До сплати:</span>
                                 <strong>@Model.TotalAmount.ToString("0.00") ₴</strong>
                             </div>
-                            <a asp-controller="Cart" asp-action="Checkout" class="btn-buy" style="display: inline-block; text-align: center; text-decoration: none;">
+                            <a asp-controller="Cart" asp-action="Checkout" class="btn-buy">
                                 Оформити замовлення
                             </a>
                         </div>

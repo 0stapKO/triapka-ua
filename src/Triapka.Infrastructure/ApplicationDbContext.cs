@@ -20,9 +20,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<WishlistItem> WishlistItems { get; set; } = null!;
 
     public DbSet<Order> Orders { get; set; } = null!;
-    public DbSet<OrderItem> OrderItems { get; set; } = null!;
-    public DbSet<Review> Reviews { get; set; } = null!;
 
+    public DbSet<OrderItem> OrderItems { get; set; } = null!;
+
+    public DbSet<Review> Reviews { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -93,7 +94,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithMany()
             .HasForeignKey(oi => oi.ProductId)
             .OnDelete(DeleteBehavior.Restrict);
-      
+
         modelBuilder.Entity<Review>()
             .HasKey(r => r.ReviewId);
 
