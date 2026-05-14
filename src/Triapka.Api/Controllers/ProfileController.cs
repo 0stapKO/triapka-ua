@@ -101,9 +101,46 @@ public class ProfileController(
     }
 
     [HttpGet("Settings")]
-    public IActionResult Settings()
+    public async Task<IActionResult> Settings()
     {
-        return View("~/Views/Profile/Settings.cshtml");
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Redirect("/Auth/Login");
+        }
+
+        var dto = new Triapka.Application.DTOs.NewsletterSettingsDto
+        {
+            IsSubscribedToNewsletter = user.IsSubscribedToNewsletter
+        };
+
+        return View("~/Views/Profile/Settings.cshtml", dto);
+    }
+
+    [HttpPost("Settings")]
+    public async Task<IActionResult> Settings(Triapka.Application.DTOs.NewsletterSettingsDto dto)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Redirect("/Auth/Login");
+        }
+
+        user.IsSubscribedToNewsletter = dto.IsSubscribedToNewsletter;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View("~/Views/Profile/Settings.cshtml", dto);
+        }
+
+        TempData["SuccessMessage"] = "Налаштування розсилки збережено.";
+        return RedirectToAction(nameof(Settings));
     }
 
     [HttpGet("ChangePassword")]
