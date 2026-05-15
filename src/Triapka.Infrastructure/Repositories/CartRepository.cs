@@ -60,4 +60,19 @@ public class CartRepository(ApplicationDbContext context) : ICartRepository
             .ThenInclude(p => p.Images)
             .FirstAsync(c => c.CartId == cart.CartId);
     }
+
+    public async Task ClearCartAsync(string userId)
+    {
+        var cart = await context.Carts
+            .Include(c => c.CartItems)
+            .FirstOrDefaultAsync(c => c.UserId == userId);
+
+        if (cart == null || cart.CartItems.Count == 0)
+        {
+            return;
+        }
+
+        context.CartItems.RemoveRange(cart.CartItems);
+        await context.SaveChangesAsync();
+    }
 }

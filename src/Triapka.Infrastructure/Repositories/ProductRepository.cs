@@ -44,6 +44,12 @@ namespace Triapka.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task UpdateProductAsync(Product product)
+        {
+            context.Products.Update(product);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Product>> GetByCategoryAsync(int categoryId)
         {
             return await context.Products

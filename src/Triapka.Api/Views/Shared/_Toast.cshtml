@@ -1,0 +1,103 @@
+<style>
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .toast-msg {
+        background: var(--panel, #ffffff);
+        border: 1px solid var(--stroke, rgba(0,0,0,.08));
+        box-shadow: 0 8px 30px rgba(0,0,0,.15);
+        border-radius: var(--r-md, 12px);
+        padding: 16px 24px;
+        color: var(--text, #212529);
+        font-weight: 600;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transform: translateY(100%);
+        opacity: 0;
+        animation: toast-slide-in 0.3s forwards ease-out;
+    }
+    .toast-msg.hide {
+        animation: toast-slide-out 0.3s forwards ease-in;
+    }
+    .toast-icon {
+        font-size: 20px;
+    }
+    .toast-success .toast-icon { color: var(--accent, #20c997); }
+    .toast-error .toast-icon { color: #e74c3c; }
+    .toast-info .toast-icon { color: #3498db; }
+
+    @@keyframes toast-slide-in {
+        to { transform: translateY(0); opacity: 1; }
+    }
+    @@keyframes toast-slide-out {
+        to { transform: translateY(10px); opacity: 0; }
+    }
+</style>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script>
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast-msg toast-${type}`;
+        
+        let iconHtml = '<i data-lucide="check-circle" class="toast-icon"></i>';
+        if (type === 'error') iconHtml = '<i data-lucide="x-circle" class="toast-icon"></i>';
+        else if (type === 'info') iconHtml = '<i data-lucide="info" class="toast-icon"></i>';
+
+        toast.innerHTML = `${iconHtml} <span>${message}</span>`;
+        container.appendChild(toast);
+        
+        if (window.lucide) {
+            lucide.createIcons({ root: toast });
+        }
+
+        setTimeout(() => {
+            toast.classList.add('hide');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('submit', async (e) => {
+            const form = e.target;
+            const action = form.getAttribute('action') || form.action;
+            if (action && (action.includes('/Cart/Add') || action.includes('/Wishlist/Add'))) {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                if (btn) btn.disabled = true;
+
+                try {
+                    const response = await fetch(action, {
+                        method: form.method || 'POST',
+                        body: new FormData(form),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        showToast(data.message, data.success ? 'success' : 'info');
+                    } else {
+                        showToast('Виникла помилка. Спробуйте пізніше.', 'error');
+                    }
+                } catch (error) {
+                    showToast('Помилка з\'єднання.', 'error');
+                } finally {
+                    if (btn) btn.disabled = false;
+                }
+            }
+        });
+    });
+</script>

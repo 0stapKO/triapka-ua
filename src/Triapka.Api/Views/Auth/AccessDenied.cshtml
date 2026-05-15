@@ -1,0 +1,99 @@
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TRIAPKA.UA — Доступ заборонено</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root{
+            --bg: #ffffff;
+            --panel: #f8f9fa;
+            --stroke: rgba(0,0,0,.08);
+            --text: #212529;
+            --muted: rgba(0,0,0,.5);
+            --accent: #20c997;
+            --mint: #20c997;
+            --mint-2: #1aa179;
+            --shadow: 0 8px 30px rgba(0,0,0,.08);
+            --r-xl: 32px;
+            --r-md: 20px;
+            --r-sm: 16px;
+        }
+        *{ box-sizing:border-box; }
+        html, body{ height:100%; margin:0; }
+        body{
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            background:
+                radial-gradient(1100px 700px at 20% -10%, rgba(220,53,69,.06), transparent 60%),
+                radial-gradient(900px 600px at 85% 0%, rgba(32,201,151,.04), transparent 55%),
+                var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .card {
+            background: white;
+            border: 1px solid var(--stroke);
+            border-radius: var(--r-xl);
+            box-shadow: var(--shadow);
+            padding: 48px 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+        .icon-wrap {
+            width: 80px;
+            height: 80px;
+            background: #fee2e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        h1 { margin: 0 0 12px; font-size: 28px; font-weight: 800; }
+        p { color: var(--muted); margin: 0 0 32px; font-size: 16px; line-height: 1.6; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--mint), var(--mint-2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .2s;
+            box-shadow: 0 4px 14px rgba(32,201,151,.3);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(32,201,151,.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon-wrap">
+            <i data-lucide="shield-x" style="width:38px;height:38px;color:#dc3545;stroke-width:2;"></i>
+        </div>
+        <h1>Доступ заборонено</h1>
+        <p>У вас немає прав для перегляду цієї сторінки.<br>Зверніться до адміністратора.</p>
+        <a href="/" class="btn">
+            <i data-lucide="home" style="width:18px;height:18px;"></i>
+            На головну
+        </a>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

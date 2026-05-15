@@ -19,10 +19,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<WishlistItem> WishlistItems { get; set; } = null!;
 
+    public DbSet<Order> Orders { get; set; } = null!;
+
+    public DbSet<OrderItem> OrderItems { get; set; } = null!;
+
+    public DbSet<Review> Reviews { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        // ── Category / Product ──────────────────────────────────────────
         modelBuilder.Entity<ProductCategory>().HasKey(pc => pc.CategoryId);
         modelBuilder.Entity<ProductImage>().HasKey(pi => pi.ImageId);
 
@@ -36,21 +43,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .WithMany(p => p.Images)
             .HasForeignKey(pi => pi.ProductId);
 
-        modelBuilder.Entity<CartItem>()
-            .HasOne(ci => ci.Cart)
-            .WithMany(c => c.CartItems)
-            .HasForeignKey(ci => ci.CartId);
+        modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(10,2)");
+        modelBuilder.Entity<Product>().Property(p => p.Rating).HasColumnType("decimal(3,2)");
 
-        modelBuilder.Entity<CartItem>()
-            .HasOne(ci => ci.Product)
-            .WithMany()
-            .HasForeignKey(ci => ci.ProductId);
-
-        modelBuilder.Entity<WishlistItem>()
-            .HasOne(wi => wi.Product)
-            .WithMany()
-            .HasForeignKey(wi => wi.ProductId);
-
+        // ── Cart ────────────────────────────────────────────────────────
         modelBuilder.Entity<Cart>()
             .HasOne(c => c.User)
             .WithOne(u => u.Cart)
@@ -61,6 +57,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasIndex(c => c.UserId)
             .IsUnique();
 
+        modelBuilder.Entity<CartItem>()
+            .HasOne(ci => ci.Cart)
+            .WithMany(c => c.CartItems)
+            .HasForeignKey(ci => ci.CartId);
+
+        modelBuilder.Entity<CartItem>()
+            .HasOne(ci => ci.Product)
+            .WithMany()
+            .HasForeignKey(ci => ci.ProductId);
+
+        // ── Wishlist ────────────────────────────────────────────────────
         modelBuilder.Entity<WishlistItem>()
             .HasOne(w => w.User)
             .WithMany(u => u.WishlistItems)
@@ -71,7 +78,51 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasIndex(w => new { w.UserId, w.ProductId })
             .IsUnique();
 
-        modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(10,2)");
-        modelBuilder.Entity<Product>().Property(p => p.Rating).HasColumnType("decimal(3,2)");
+        modelBuilder.Entity<WishlistItem>()
+            .HasOne(wi => wi.Product)
+            .WithMany()
+            .HasForeignKey(wi => wi.ProductId);
+
+        // ── Orders ──────────────────────────────────────────────────────
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.User)
+            .WithMany(u => u.Orders)
+            .HasForeignKey(o => o.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Order>()
+            .Property(o => o.TotalPrice)
+            .HasColumnType("decimal(10,2)");
+
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(oi => oi.Order)
+            .WithMany(o => o.OrderItems)
+            .HasForeignKey(oi => oi.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(oi => oi.Product)
+            .WithMany()
+            .HasForeignKey(oi => oi.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<OrderItem>()
+            .Property(oi => oi.PriceAtPurchase)
+            .HasColumnType("decimal(10,2)");
+
+        // ── Reviews ─────────────────────────────────────────────────────
+        modelBuilder.Entity<Review>().HasKey(r => r.ReviewId);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.Product)
+            .WithMany()
+            .HasForeignKey(r => r.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.User)
+            .WithMany()
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

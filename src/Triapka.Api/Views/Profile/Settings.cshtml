@@ -1,3 +1,4 @@
+@model Triapka.Application.DTOs.NewsletterSettingsDto
 @{
     Layout = null;
 }
@@ -271,6 +272,75 @@
             color: white;
         }
 
+        /* Toggle switch */
+        .toggle-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            background: var(--panel-2);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .toggle-track::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 4px;
+            top: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: transform .2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,.2);
+        }
+        .toggle-switch input:checked + .toggle-track {
+            background: var(--accent);
+        }
+        .toggle-switch input:checked + .toggle-track::before {
+            transform: translateX(24px);
+        }
+        .toggle-label {
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Success banner */
+        .success-banner {
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            color: #065f46;
+            border-radius: var(--r-sm);
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            animation: fadeIn .3s ease;
+        }
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
         .logout-btn {
             color: #dc3545 !important;
         }
@@ -304,9 +374,22 @@
                     <a asp-controller="Home" asp-action="About">Про нас</a>
                 </nav>
                 <div class="header-actions" aria-label="Actions">
-                    <a class="icon-btn" asp-controller="Cart" asp-action="Index" title="Кошик"><i data-lucide="shopping-cart" class="icon-style" style="width:24px; height:24px;"></i></a>
-                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index" title="Вподобані"><i data-lucide="heart" class="icon-style" style="width:24px; height:24px;"></i></a>
-                    <a class="icon-btn" asp-controller="Profile" asp-action="Index" title="Профіль"><i data-lucide="user" class="icon-style" style="width:24px; height:24px;"></i></a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="icon-btn" href="/Admin/Newsletter" title="Адмін-панель" aria-label="Адмін-панель"
+                           style="background:linear-gradient(135deg,#20c997,#1aa179);border-color:#1aa179;">
+                            <i data-lucide="shield" style="color:white;width:22px;height:22px;stroke-width:2.5;"></i>
+                        </a>
+                    }
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent);" : "")" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">
+                        <i data-lucide="shopping-cart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent);" : "")" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">
+                        <i data-lucide="heart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent);" : "")" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
+                        <i data-lucide="user" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
                 </div>
             </div>
         </header>
@@ -339,11 +422,31 @@
                             Вийти
                         </a>
                     </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li style="margin-top: 20px; border-top: 1px solid var(--stroke); padding-top: 20px;">
+                            <span style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:0 18px 6px;display:block;">АДМІН</span>
+                        </li>
+                        <li>
+                            <a href="/Admin/Newsletter" style="color:#1aa179;">
+                                <i data-lucide="mail" style="width:20px;height:20px;color:#1aa179;"></i>
+                                Розсилка
+                            </a>
+                        </li>
+                    }
                 </ul>
             </aside>
 
             <main class="main">
                 <h2>Налаштування</h2>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="success-banner" role="alert">
+                        <i data-lucide="check-circle" style="width:20px;height:20px;flex-shrink:0;"></i>
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
                 
                 <div class="settings-list">
                     <div class="setting-item">
@@ -356,10 +459,27 @@
                     
                     <div class="setting-item">
                         <div class="info">
-                            <h3>Сповіщення</h3>
-                            <p>Керуйте розсилкою та сповіщеннями на email</p>
+                            <h3>Розсилка</h3>
+                            <p>Отримуйте новини, акції та оновлення на ваш email</p>
                         </div>
-                        <a href="#" class="btn-outline">Налаштувати</a>
+                        <form asp-action="Settings" asp-controller="Profile" method="post" id="newsletterForm">
+                            <div class="toggle-wrap">
+                                <label class="toggle-switch" title="Підписка на розсилку">
+                                    <input type="checkbox"
+                                           id="IsSubscribedToNewsletter"
+                                           name="IsSubscribedToNewsletter"
+                                           value="true"
+                                           @(Model?.IsSubscribedToNewsletter == true ? "checked" : "")
+                                           onchange="document.getElementById('newsletterForm').submit()" />
+                                    <span class="toggle-track"></span>
+                                </label>
+                                <span class="toggle-label">
+                                    @(Model?.IsSubscribedToNewsletter == true ? "Підписано" : "Вимкнено")
+                                </span>
+                            </div>
+                            @* Hidden field so an unchecked box still sends 'false' *@
+                            <input type="hidden" name="IsSubscribedToNewsletter" value="false" />
+                        </form>
                     </div>
                 </div>
             </main>

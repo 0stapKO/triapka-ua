@@ -84,8 +84,28 @@
         .summary-total { display: flex; justify-content: space-between; margin-top: 20px; font-size: 22px; font-weight: 800; }
         .summary-total strong { color: var(--accent); font-size: 26px; }
         
-        .btn-buy { width: 100%; padding: 18px; margin-top: 30px; background: var(--accent); color: white; border: none; border-radius: 999px; font-size: 22px; font-weight: 800; cursor: pointer; }
-        
+        .btn-buy { 
+            display: block;
+            width: 100%; 
+            padding: 16px 10px;
+            margin-top: 30px; 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            border-radius: 999px; 
+            font-size: 20px;
+            font-weight: 800; 
+            cursor: pointer; 
+            text-align: center;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: 0.2s ease;
+        }
+        .btn-buy:hover {
+            background: var(--mint-2);
+            box-shadow: 0 6px 16px rgba(32, 201, 151, 0.3); 
+            transform: translateY(-1px);
+        }
         .empty-msg { padding: 40px; text-align: center; font-size: 24px; font-weight: bold; background: var(--panel); border-radius: var(--r-xl); }
     </style>
 </head>
@@ -107,11 +127,15 @@
                     <a asp-controller="Products" asp-action="Index">Головна</a>
                     <a asp-controller="Home" asp-action="About">Про нас</a>
                 </nav>
-                <div class="header-actions">
-                    <a class="icon-btn" asp-controller="Cart" asp-action="Index"><i data-lucide="shopping-cart"></i></a>
-                    <a class="icon-btn" asp-controller="Wishlist" asp-action="Index"><i data-lucide="heart"></i></a>
-                    <a class="icon-btn" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
-                        <i data-lucide="user" class="icon-style" style="color:inherit; width:24px; height:24px;"></i>
+                <div class="header-actions" aria-label="Actions">
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent);" : "")" asp-controller="Cart" asp-action="Index" title="Кошик" aria-label="Кошик">
+                        <i data-lucide="shopping-cart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cart" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent);" : "")" asp-controller="Wishlist" asp-action="Index" title="Вподобані" aria-label="Вподобані">
+                        <i data-lucide="heart" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wishlist" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
+                    </a>
+                    <a class="icon-btn @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "is-active" : "")" style="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent);" : "")" asp-controller="Profile" asp-action="Index" title="Профіль" aria-label="Профіль">
+                        <i data-lucide="user" class="icon-style" style="width:24px; height:24px; @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" || ViewContext.RouteData.Values["controller"]?.ToString() == "AuthViews" || ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" ? "color: var(--accent); fill: var(--accent);" : "color: inherit;")"></i>
                     </a>
                 </div>
             </div>
@@ -211,7 +235,9 @@
                                 <span>До сплати:</span>
                                 <strong>@Model.TotalAmount.ToString("0.00") ₴</strong>
                             </div>
-                            <button class="btn-buy">Купити</button>
+                            <a asp-controller="Cart" asp-action="Checkout" class="btn-buy">
+                                Оформити замовлення
+                            </a>
                         </div>
                     </div>
                 </div>

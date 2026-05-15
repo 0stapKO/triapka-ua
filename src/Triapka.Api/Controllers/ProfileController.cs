@@ -1,18 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 using Triapka.Application.DTOs;
+using Triapka.Application.Interfaces;
 using Triapka.Domain.Entities;
 
 namespace Triapka.Api.Controllers;
 
 [Authorize]
 [Route("Profile")]
-public class ProfileController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
+public class ProfileController(
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
+    IOrderService orderService) : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly IOrderService _orderService = orderService;
 
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -57,6 +63,8 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
             user.PhoneNumber = dto.PhoneNumber;
             user.Address = dto.Address;
 
+            Log.Information("Updating profile for user {UserId}. New Phone: {Phone}", user.Id, dto.PhoneNumber);
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
@@ -68,20 +76,71 @@ public class ProfileController(UserManager<ApplicationUser> userManager, SignInM
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
+        else
+        {
+            Log.Warning(
+                "Profile update failed validation for user {UserId}. Errors: {Errors}",
+                user.Id,
+                string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+        }
 
         return View("~/Views/Profile/Edit.cshtml", dto);
     }
 
     [HttpGet("Orders")]
-    public IActionResult Orders()
+    public async Task<IActionResult> Orders()
     {
-        return View("~/Views/Profile/Orders.cshtml");
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Redirect("/Auth/Login");
+        }
+
+        var orders = await _orderService.GetUserOrdersAsync(user.Id);
+        return View("~/Views/Profile/Orders.cshtml", orders);
     }
 
     [HttpGet("Settings")]
-    public IActionResult Settings()
+    public async Task<IActionResult> Settings()
     {
-        return View("~/Views/Profile/Settings.cshtml");
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Redirect("/Auth/Login");
+        }
+
+        var dto = new Triapka.Application.DTOs.NewsletterSettingsDto
+        {
+            IsSubscribedToNewsletter = user.IsSubscribedToNewsletter
+        };
+
+        return View("~/Views/Profile/Settings.cshtml", dto);
+    }
+
+    [HttpPost("Settings")]
+    public async Task<IActionResult> Settings(Triapka.Application.DTOs.NewsletterSettingsDto dto)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Redirect("/Auth/Login");
+        }
+
+        user.IsSubscribedToNewsletter = dto.IsSubscribedToNewsletter;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View("~/Views/Profile/Settings.cshtml", dto);
+        }
+
+        TempData["SuccessMessage"] = "Налаштування розсилки збережено.";
+        return RedirectToAction(nameof(Settings));
     }
 
     [HttpGet("ChangePassword")]
