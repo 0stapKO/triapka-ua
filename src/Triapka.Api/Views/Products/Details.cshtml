@@ -516,6 +516,45 @@
         .interactive-rating label:hover {
             transform: scale(1.15);
         }
+
+        .product-card {
+            background: var(--panel);
+            border: 1px solid var(--stroke);
+            border-radius: var(--r-md);
+            padding: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: rgba(32,201,151,.3);
+            color: inherit;
+        }
+        .card-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: var(--r-sm);
+            margin-bottom: 12px;
+            background: #fff;
+        }
+        .card-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            flex-grow: 1;
+        }
+        .card-price {
+            font-weight: 800;
+            color: var(--accent);
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -780,14 +819,32 @@
                             @foreach (var relatedItem in Model.RelatedProducts)
                             {
                                 <div class="col-6 col-md-4 col-lg-3">
-                                    <partial name="_ProductCard" model="relatedItem" />
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@relatedItem.ProductId" class="product-card">
+                                        <img src="@(relatedItem.MainImageUrl ?? "/img/no-image.png")" class="card-img" alt="@relatedItem.Name" />
+                                        <div class="card-name">@relatedItem.Name</div>
+                                        <div class="card-price">@relatedItem.Price.ToString("0.00") ₴</div>
+                                        
+                                        <div style="display: flex; gap: 2px; margin-top: 8px;">
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                var itemRating = (int)(relatedItem.Rating ?? 0); 
+        
+                                                <i data-lucide="star" 
+                                                   class="star-style @(i < itemRating ? "star-filled" : "star-empty")" 
+                                                   style="width: 14px; height: 14px;"></i>
+                                            }
+                                        </div>
+                                    </a>
                                 </div>
                             }
                         </div>
                     }
                     else
                     {
-                        <p style="color: var(--muted); font-size: 18px; text-align: center; padding: 40px 0;">Схожих товарів поки немає.</p>
+                        <div style="text-align: center; padding: 40px 0;">
+                            <i data-lucide="package-search" style="width: 48px; height: 48px; color: var(--stroke); margin-bottom: 16px;"></i>
+                            <p style="color: var(--muted); font-size: 20px; margin: 0;">Схожих товарів поки немає.</p>
+                        </div>
                     }
                 </div>
             </div>
